@@ -21,14 +21,16 @@ Route.get('/', () => {
 })
 
 Route
-  .post('login', 'UserController.login')
+  .post('login', 'AuthController.login')
   .prefix('api/v1')
   .middleware('guest')
 
-// Route
-//   .get('users/:id', 'UserController.show')
-//   .middleware('auth')
-
 Route.group(() => {
-  Route.resource('users', 'UserController')
+
+  Route.get('user', 'AuthController.show');
+
+  Route.resource('users', 'UserController');
+
+  Route.resource('services', 'ServiceController');
+  
 }).prefix('api/v1').middleware(['auth'])

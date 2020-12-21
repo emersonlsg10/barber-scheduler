@@ -15,10 +15,26 @@
 const Factory = use('Factory')
 const Hash = use('Hash')
 
+// User blueprint
 Factory.blueprint('App/Models/User', async (faker) => {
   return {
-    username: 'emerson',
-    email: 'emersonlsg10@gmail.com',
+    username: faker.username(),
+    email: faker.email(),
+    phone: faker.phone(),
+    cpf: faker.cpf(),
+    city: faker.city(),
+    state: faker.state(),
+    group: 3,
     password: '123456'
+  }
+})
+
+// Service blueprint
+Factory.blueprint('App/Models/Service', async (faker) => {
+  return {
+    name: faker.name(),
+    price: 15.0,
+    time: 30.0,
+    company_id: 21,
   }
 })
