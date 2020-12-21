@@ -1,5 +1,7 @@
 'use strict'
 
+const formatResponse = require('../../appUtils/formatResponse');
+
 class UserController {
 
     async login({ auth, request }) {
@@ -7,11 +9,33 @@ class UserController {
         return await auth.withRefreshToken().attempt(uid, password)
     }
 
-    show({ auth, params }) {
+    index({ auth, response }) {
+        return formatResponse({
+            response,
+            status: 200,
+            msg: 'Usuário encontrado',
+            total: 1,
+            data: auth.user,
+        })
+    }
+
+    show({ auth, params, response }) {
         if (auth.user.id !== Number(params.id)) {
-            return "You cannot see someone else's profile"
+            return formatResponse({
+                response,
+                status: 404,
+                msg: 'Usuário não encontrado',
+                total: 0,
+                data: [],
+            })
         }
-        return auth.user
+        return formatResponse({
+            response,
+            status: 200,
+            msg: 'Usuário encontrado',
+            total: 1,
+            data: auth.user,
+        })
     }
 }
 
