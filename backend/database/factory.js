@@ -20,6 +20,7 @@ Factory.blueprint('App/Models/User', async (faker) => {
   return {
     username: faker.username(),
     email: faker.email(),
+    slug: 'emerson-barber-' + (Math.random() * (100 - 1) + 1),
     phone: faker.phone(),
     cpf: faker.cpf(),
     city: faker.city(),
@@ -35,6 +36,6 @@ Factory.blueprint('App/Models/Service', async (faker) => {
     name: faker.name(),
     price: 15.0,
     time: 30.0,
-    company_id: 21,
+    company_id: 33,
   }
 })

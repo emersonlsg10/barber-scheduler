@@ -30,7 +30,7 @@ Route.group(() => {
   Route.get('user', 'AuthController.show');
 
   Route.resource('users', 'UserController');
-
   Route.resource('services', 'ServiceController');
+  Route.resource('schedules', 'ScheduleController');
   
 }).prefix('api/v1').middleware(['auth'])

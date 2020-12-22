@@ -17,7 +17,7 @@ class UserController {
     }
 
     async show({ response, params }) {
-        const user = await User.find(params.id);
+        const user = await User.query().where('slug', params.id).first();
         return formatResponse({
             response,
             status: 200,
@@ -28,10 +28,11 @@ class UserController {
     }
 
     async store({ response, request }) {
-        const { username, email, phone, cpf, city, state, group, password } = request.all();
+        const { username, email, slug, phone, cpf, city, state, group, password } = request.all();
         const user = new User();
         user.username = username;
         user.email = email;
+        user.slug = slug;
         user.phone = phone;
         user.cpf = cpf;
         user.city = city;
@@ -60,10 +61,11 @@ class UserController {
     }
 
     async update({ params, request, response }) {
-        const { username, email, phone, cpf, city, state, group, password } = request.all();
+        const { username, email, slug, phone, cpf, city, state, group, password } = request.all();
         const user = new User();
         user.username = username;
         user.email = email;
+        user.slug = slug;
         user.phone = phone;
         user.cpf = cpf;
         user.city = city;

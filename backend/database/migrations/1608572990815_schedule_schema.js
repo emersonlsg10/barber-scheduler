@@ -7,7 +7,8 @@ class ScheduleSchema extends Schema {
   up() {
     this.create('schedules', (table) => {
       table.increments()
-      table.date('schedule')
+      table.date('date').nullable()
+      table.time('schedule').nullable()
 
       table.integer('service_id').unsigned()
       table.foreign('service_id').references('services.id')
