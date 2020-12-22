@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [{
+    "type": "node",
+    "request": "launch",
+    "name": "Next: Node",
+    "port": 9229,
+    "runtimeExecutable": "npm",
+    "runtimeArgs": ["run", "debug"],
+    "sourceMaps": true,
+    "outFiles": ["${workspaceFolder}/.next/server/**/*.js"],
+    "smartStep": true,
+    "console": "integratedTerminal",
+    "skipFiles": [
+      "<node_internals>/**/*.js",
+      "<eval>/**/*.*",
+      "${workspaceFolder}/node_modules/**/*.js",
+    ]
+  }]
+}
