@@ -5,7 +5,6 @@ import Head from 'components/head';
 import LoginForm from 'components/pages/index/LoginForm';
 import { Creators as LoginCreators } from 'appStore/ducks/login';
 import { makeStyles } from '@material-ui/styles';
-import Link from 'next/link';
 
 const useStyles = makeStyles(() => ({
   container: {

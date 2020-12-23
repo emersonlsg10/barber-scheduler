@@ -20,10 +20,12 @@ Route.get('/', () => {
   return { greeting: 'Hello world in JSON' }
 })
 
-Route
-  .post('login', 'AuthController.login')
-  .prefix('api/v1')
-  .middleware('guest')
+Route.group(() => {
+  Route.post('login', 'AuthController.login')
+
+  Route.post('register', 'AuthController.store')
+
+}).prefix('api/v1').middleware(['guest'])
 
 Route.group(() => {
 
@@ -32,5 +34,5 @@ Route.group(() => {
   Route.resource('users', 'UserController');
   Route.resource('services', 'ServiceController');
   Route.resource('schedules', 'ScheduleController');
-  
+
 }).prefix('api/v1').middleware(['auth'])

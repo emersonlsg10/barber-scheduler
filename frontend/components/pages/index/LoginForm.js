@@ -167,22 +167,21 @@ const LoginForm = ({ onSubmit, isLoading }) => {
             {isLoading ? (
               <CircularProgress size={22} color="primary" />
             ) : (
-              'Acessar'
-            )}
+                'Acessar'
+              )}
           </Button>
           <Typography
             align="center"
             style={{ marginTop: '10px', marginBottom: '20px' }}>
-            <span
-              style={{ color: 'white', fontSize: '13px', marginTop: '10px' }}>
-              Ainda não é assinante ?
+            <span style={{ color: 'white', fontSize: '13px', marginTop: 15 }}>
+              Ainda não está cadastrado ?
             </span>
-            <Link href="https://pay.hotmart.com/U42130464R">
+            <Link href="/register">
               <a
                 style={{
                   color: 'white',
                   fontWeight: 'bold',
-                  fontSize: '13px',
+                  fontSize: 15,
                   marginTop: '10px',
                   textDecoration: 'none',
                 }}>

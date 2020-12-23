@@ -3,6 +3,7 @@ import app from './app';
 import auth from './auth';
 import users from './users';
 import login from './login';
+import register from './register';
 import { reducer as notifications } from 'react-notification-system-redux';
 
 export default combineReducers({
@@ -11,4 +12,5 @@ export default combineReducers({
   users,
   login,
   notifications,
+  register,
 });

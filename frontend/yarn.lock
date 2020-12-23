@@ -1000,10 +1000,17 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@date-io/core@1.x":
+"@date-io/core@1.x", "@date-io/core@^1.3.13":
   version "1.3.13"
   resolved "https://registry.yarnpkg.com/@date-io/core/-/core-1.3.13.tgz#90c71da493f20204b7a972929cc5c482d078b3fa"
   integrity sha512-AlEKV7TxjeK+jxWVKcCFrfYAk8spX9aCyiToFIiLPtfQbsjmRGLIhb5VZgptQcJdHtLXo7+m0DuurwFgUToQuA==
+
+"@date-io/date-fns@^1.3.13":
+  version "1.3.13"
+  resolved "https://registry.yarnpkg.com/@date-io/date-fns/-/date-fns-1.3.13.tgz#7798844041640ab393f7e21a7769a65d672f4735"
+  integrity sha512-yXxGzcRUPcogiMj58wVgFjc9qUYrCnnU9eLcyNbsQCmae4jPuZCDoIBR21j8ZURsM7GRtU62VOw5yNd4dDHunA==
+  dependencies:
+    "@date-io/core" "^1.3.13"
 
 "@emotion/hash@^0.8.0":
   version "0.8.0"
@@ -2299,6 +2306,11 @@ d@1, d@^1.0.1:
   dependencies:
     es5-ext "^0.10.50"
     type "^1.0.1"
+
+date-fns@^2.16.1:
+  version "2.16.1"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.16.1.tgz#05775792c3f3331da812af253e1a935851d3834b"
+  integrity sha512-sAJVKx/FqrLYHAQeN7VpJrPhagZc9R4ImZIWYRFZaaohR3KzmuK88touwsSwSVT8Qcbd4zoDsnGfX4GFB4imyQ==
 
 debug@=3.1.0:
   version "3.1.0"
@@ -4712,6 +4724,14 @@ react-notification-system@^0.2.x:
   integrity sha1-pg7du2IiWtj5/F14N1Rr9s2zaBg=
   dependencies:
     create-react-class "^15.5.1"
+    object-assign "^4.0.1"
+    prop-types "^15.5.6"
+
+react-notification-system@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/react-notification-system/-/react-notification-system-0.4.0.tgz#30db3963a176ee103b4a3bb1494c2b5578d5c024"
+  integrity sha512-5WhXnjkYC07zqXruCiUXDU9iHjVxZlL1zgHpNgXk91A5ghV1AHrWVrJYo1XM4SnwlKy5NLdftkaTl+pTuVFAqw==
+  dependencies:
     object-assign "^4.0.1"
     prop-types "^15.5.6"
 
