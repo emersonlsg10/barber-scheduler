@@ -10,25 +10,21 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-
-import HomeIcon from '@material-ui/icons/Home';
-import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
-import Router from 'next/router';
-import { Creators } from 'appStore/ducks/login';
+import { Creators as AuthCreators } from 'appStore/ducks/auth';
 import Link from 'next/link';
+// import BookmarkIcon from '@material-ui/icons/Bookmark';
+// import TimelineIcon from '@material-ui/icons/Timeline';
 
 export const appPages = [
   {
     id: 'home',
-    name: 'Home',
-    path: '/dashboard',
-    icon: <HomeIcon />,
+    name: 'Início',
+    path: '/',
   },
   {
-    id: 'users',
-    name: 'Usuarios',
-    path: '/users',
-    icon: <AccountBalanceWalletIcon />,
+    id: 'configs',
+    name: 'Configurações',
+    path: '/configs',
   },
 ];
 
@@ -57,21 +53,24 @@ export default function SideDrawer() {
   });
 
   const toggleDrawer = (side, open) => event => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+    if (
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
       return;
     }
 
     setState({ ...state, [side]: open });
   };
 
-  const onLinkPress = path => () => {
+  /* const onLinkPress = path => () => {
     Router.push({
       pathname: path,
     });
-  };
+  }; */
 
   const onLogout = () => {
-    dispatch(Creators.getLogoutRequest());
+    dispatch(AuthCreators.getLogoutRequest());
   };
 
   const sideList = side => (
@@ -79,14 +78,15 @@ export default function SideDrawer() {
       className={classes.list}
       role="presentation"
       onClick={toggleDrawer(side, false)}
-      onKeyDown={toggleDrawer(side, false)}
-    >
+      onKeyDown={toggleDrawer(side, false)}>
       <List className={classes.listMenus}>
         {appPages.map(menu => (
           <React.Fragment key={menu.id}>
             <Link href={menu.path}>
               <ListItem button>
-                <ListItemIcon>{menu.icon}</ListItemIcon>
+                <ListItemIcon style={{ color: '#aaa' }}>
+                  {menu.icon}
+                </ListItemIcon>
                 <ListItemText primary={menu.name} />
               </ListItem>
             </Link>
@@ -101,6 +101,11 @@ export default function SideDrawer() {
         </ListItemIcon>
         <ListItemText primary="Sair" />
       </ListItem>
+      <style jsx>{`
+        .MuiListItemIcon-root {
+          min-width: 35px;
+        }
+      `}</style>
     </div>
   );
 

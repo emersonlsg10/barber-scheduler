@@ -1,11 +1,13 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import { MenuItem, Typography } from '@material-ui/core';
-
+import { MenuItem } from '@material-ui/core';
+import Link from 'next/link';
 import Router from 'next/router';
 import { appPages } from 'components/SideDrawer';
+// import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const useStyles = makeStyles({
   list: {
@@ -18,19 +20,35 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'row',
     flex: 1,
+    marginLeft: 0,
+  },
+  itemMenu: {
+    padding: '5px 5px 0px 0px',
+    color: '#aaa',
+    '&:hover': {
+      color: '#fff',
+    },
   },
   fullList: {
     width: 'auto',
   },
-  menuItem: {
+  menu: {
     display: 'flex',
-    // padding: 10,
+    padding: 0,
     flexDirection: 'column',
-    // margin: 0,
+    margin: 0,
+  },
+  itemSelected: {
+    padding: '5px 5px 0px 0px',
+    color: '#fff',
   },
   menuIcon: {
-    justifyContent: 'center',
-    color: 'white',
+    paddingRight: 0,
+    paddingLeft: 0,
+    marginRight: 0,
+    marginLeft: 0,
+    marginTop: 3,
+    color: 'inherit',
     fontSize: 'large',
   },
 });
@@ -39,22 +57,51 @@ export default function HorizontalMenu() {
   const classes = useStyles();
 
   const onLinkPress = path => () => {
-    Router.push({
-      pathname: path,
-    });
+    setTimeout(function () {
+      Router.push(path);
+    }, 250);
   };
 
   return (
     <List className={classes.listMenus}>
       {appPages.map(menu => (
         <MenuItem
-          className={classes.menuItem}
+          className={classes.menu}
           button
           key={menu.id}
-          onClick={onLinkPress(menu.path)}
-        >
-          <ListItemIcon className={classes.menuIcon}>{menu.icon}</ListItemIcon>
-          <Typography variant="caption">{menu.name}</Typography>
+          onClick={onLinkPress(menu.path)}>
+          <React.Fragment>
+            <Link href={menu.path}>
+              <ul className={classes.itemMenu}>
+                {menu.icon ? (
+                  <>
+                    <div
+                      style={{
+                        display: 'flex',
+                      }}>
+                      <div
+                        style={{
+                          width: 25,
+                          paddingLeft: 0,
+                        }}>
+                        <ListItemIcon className={classes.menuIcon}>
+                          {menu.icon}
+                        </ListItemIcon>
+                      </div>
+                      <div>
+                        <ListItemText primary={menu.name} />
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <ListItemText
+                    primary={menu.name}
+                    style={{ marginRight: 5 }}
+                  />
+                )}
+              </ul>
+            </Link>
+          </React.Fragment>
         </MenuItem>
       ))}
     </List>

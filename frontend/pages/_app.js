@@ -5,7 +5,6 @@ import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../components/theme';
-import NotificationContainer from 'components/NotificationContainer';
 import { Provider } from 'react-redux';
 import withRedux from 'next-redux-wrapper';
 import configureStore from 'appStore/index';
@@ -38,7 +37,6 @@ class MyApp extends App {
         <CssBaseline />
         <Provider store={store}>
           <Component {...pageProps} />
-          <NotificationContainer />
         </Provider>
       </ThemeProvider>
     );

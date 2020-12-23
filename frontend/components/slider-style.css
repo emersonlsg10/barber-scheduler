@@ -1,0 +1,111 @@
+.BrainhubCarousel{
+  position: relative;
+}
+.BrainhubCarousel__customArrows{
+  position: absolute;
+  z-index: 2;
+  cursor: pointer;
+  top: 0;
+  height: calc(100% - 5px);
+}
+
+.BrainhubCarousel__customArrows > * {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@media screen and (max-width: 720px) {
+  .BrainhubCarousel__customArrows {
+    display: none;
+  }
+}
+
+.BrainhubCarousel__custom-arrowRight{
+  right: 0px;
+  background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
+  padding-right: 20px;
+}
+
+.BrainhubCarousel__custom-arrowLeft{
+  left: 0;
+  padding-left: 20px;
+  background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+}
+
+.awssld__bullets::before {
+  content: '';
+  display: block;
+  width: 100%;
+  position: absolute;
+  background: #EB961F;
+  height: 4px;
+}
+
+.awssld__bullets button {
+  z-index: 2;
+  position: relative;
+  border-radius: 0;
+  background: #252525;
+  margin: 0;
+  transition: none;
+  width: auto;
+  padding: 3px 8px;
+  height: 32px;
+}
+
+.awssld__bullets button:hover{
+  transform: none;
+}
+
+.awssld__bullets button:hover::before{
+  background-color: rgb(228, 172, 94);
+  border-color: rgb(228, 172, 94);
+}
+
+.awssld__bullets .awssld__bullets--loading{
+  transform: none;
+  background: #252525;
+}
+
+.awssld__bullets .awssld__bullets--loading::before{
+  background-color: rgb(228, 172, 94);
+  border-color: rgb(228, 172, 94);
+}
+
+.awssld__bullets .awssld__bullets--active{
+  transform: none;
+  background: #252525;
+}
+
+.awssld__bullets .awssld__bullets--active:hover{
+  transform: none;
+}
+
+.awssld__bullets button:first-child{
+  padding-left: 20px;
+}
+
+.awssld__bullets button:last-child{
+  padding-right: 20px;
+}
+
+.awssld__bullets button::before{
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: 5px;
+  border-radius: 50%;
+  background: #252525;
+  text-indent: -9999px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid white;
+  transition: transform 0.225s cubic-bezier(0.8, 1.35, 0.75, 1.45), background-color 0.175s ease-out;
+}
+
+.awssld__bullets .awssld__bullets--active::before{
+  background: #EB961F;
+  border-color: #EB961F;
+}
