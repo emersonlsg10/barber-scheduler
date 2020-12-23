@@ -2,8 +2,8 @@ import { create } from 'apisauce';
 import appUtils from 'utils/appUtils';
 
 const apiUrl = {
-  hml: 'https://reqres.in/api',
-  prod: 'https://reqres.in/api',
+  hml: 'http://127.0.0.1:3333/',
+  prod: 'http://127.0.0.1:3333/',
 };
 
 const api = create({

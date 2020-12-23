@@ -22,7 +22,7 @@ function Layout({ children, maxWidth = 'lg' }) {
 
   return (
     <>
-      <Head title="Agenda aqui" />
+      <Head title="Agenda Aqui" />
       <Nav />
       <Container
         className={classes.contentContainer}

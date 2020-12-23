@@ -10,6 +10,7 @@ import Link from 'next/link';
 const useStyles = makeStyles(() => ({
   container: {
     display: `flex`,
+    background: 'linear-gradient(180deg, #2f2f30 30%, #0f0f0f 90%)',
     justifyContent: `center`,
     alignItems: `center`,
     height: `100vh`,
@@ -18,7 +19,7 @@ const useStyles = makeStyles(() => ({
     opacity: 0.9,
     borderRadius: 15,
     padding: 35,
-    background: 'linear-gradient(180deg, #2f2f30 30%, #0f0f0f 90%)',
+    background: 'black',
     width: '370px',
   },
   loginLogo: {
@@ -34,31 +35,28 @@ function LoginScreen({ query }) {
 
   const onSubmit = ({ email, password }) => {
     const route = query.route ? query.route : '';
-    console.log(route);
     dispatch(LoginCreators.getLoginRequest({ email, password, route }));
   };
 
   return (
     <>
-      <Head title="Login - Cis Continuum" />
+      <Head title="Login - Agenda Aqui" />
       <main className={'formLogin'}>
         <Box className={classes.container}>
           <Card className={classes.loginForm}>
-            <Link href="/">
-              <a
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <img
-                  src="/img/cis-continuum-logo.png"
-                  alt="logo"
-                  className={classes.loginLogo}
-                  width="70%"
-                />
-              </a>
-            </Link>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <img
+                src="barber-logo.jpg"
+                alt="logo"
+                className={classes.loginLogo}
+                width="70%"
+              />
+            </div>
             <LoginForm onSubmit={onSubmit} isLoading={loading} />
           </Card>
         </Box>

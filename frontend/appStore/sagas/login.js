@@ -1,4 +1,4 @@
-import { call, put, all, takeLatest } from 'redux-saga/effects';
+import { call, put, all, takeLatest, delay } from 'redux-saga/effects';
 import Router from 'next/router';
 // import { Creators as ProfileCreators } from 'appStore/ducks/perfil';
 import { setCookie, removeCookie } from 'utils/cookie';
@@ -13,22 +13,20 @@ import interceptError from 'services/interceptError';
 // import Notifications from 'react-notification-system-redux';
 
 function* getLogin({ payload }) {
-  console.log({ payload });
   try {
     const { email, password } = payload;
-    const response = yield call(api.post, '/login', {
-      email,
+    const response = yield call(api.post, 'api/v1/login', {
+      uid: email,
       password,
+      grant_type: 'password',
     });
     yield interceptResponse(response);
 
     const { data } = response;
     yield call(setCookie, 'auth', data.token);
+    yield delay(500);
     yield put(LoginCreators.getLoginSuccess());
-    // yield put(
-    //   Notifications.success({ title: 'Autenticado com sucesso', message: 'Redirecionando...' })
-    // );
-    yield call(Router.push, { pathname: '/dashboard' });
+    yield call(Router.push, { pathname: '/' });
   } catch (err) {
     yield interceptError(LoginCreators.getLoginFailure, err);
   }

@@ -59,3 +59,4 @@ Server
   .registerGlobal(globalMiddleware)
   .registerNamed(namedMiddleware)
   .use(serverMiddleware)
+  .use(['Adonis/Middleware/Cors'])
