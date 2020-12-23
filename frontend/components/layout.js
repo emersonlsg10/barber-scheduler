@@ -5,9 +5,9 @@ import Footer from 'components/footer';
 import { Container, makeStyles } from '@material-ui/core';
 // import BuildIcon from '@material-ui/icons/Build';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
-    backgroundColor: '#252525',
+    backgroundColor: theme.palette.background.primary,
     minHeight: '100%',
     //position: 'relative',
   },
@@ -15,14 +15,14 @@ const useStyles = makeStyles({
     paddingBottom: '2.5rem',
     minHeight: '85vh',
   },
-});
+}));
 
 function Layout({ children, maxWidth = 'lg' }) {
   const classes = useStyles();
 
   return (
     <>
-      <Head title="Cis Continuum" />
+      <Head title="Agenda aqui" />
       <Nav />
       <Container
         className={classes.contentContainer}
