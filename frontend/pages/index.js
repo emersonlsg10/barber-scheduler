@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useEffect } from 'react';
 import Layout from 'components/layout';
 import CalendarPicker from 'components/CalendarPicker';
 import SchedulesDay from 'components/SchedulesDay';
@@ -31,6 +31,15 @@ export default function Index() {
     data: dataUser,
     loading: loadingUser,
   } = useSelector(state => state.user.details);
+
+  const { refreshToken } = useSelector(state => state.auth);
+  console.log(refreshToken, 'refreshToken');
+  useEffect(() => {
+    if (!loadingUser) {
+      dispatch(UserDetailsCreators.getRequest())
+    }
+  }, []);
+
   return (
     <>
       <Layout maxWidth={false}>
@@ -57,4 +66,6 @@ const Greetings = ({ name }) => {
   )
 };
 
-Index.getInitialProps = async ({ store }) => { };
+Index.getInitialProps = async ({ store }) => {
+  store.dispatch(UserDetailsCreators.getRequest())
+};

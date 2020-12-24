@@ -12,13 +12,13 @@ import Router from 'next/router';
 // import { Creators as ProfileCreators } from '../ducks/perfil';
 import { removeCookie, getCookie, setCookie } from 'utils/cookie';
 import { Creators as AuthCreators, Types as AuthTypes } from '../ducks/auth';
-import { Creators as UserCreators } from '../ducks/user/details';
+import { Creators as UserCreators } from '../ducks/schedules/list';
 import api from 'services/api';
 import interceptResponse from 'services/interceptResponse';
 
 function* getLogout() {
-  yield call(removeCookie, 'access_token');
-  yield call(removeCookie, 'refresh_token');
+  yield call(removeCookie, 'token');
+  yield call(removeCookie, 'refreshToken');
   yield call(Router.push, { pathname: '/login' });
   yield put(AuthCreators.getLogoutSuccess());
   yield put(UserCreators.resetUser());
@@ -55,9 +55,9 @@ function* getRefreshToken() {
     });
     if (response.status !== 200) throw response;
     yield call(api.setHeader, 'Authorization', `Bearer ${response.data.token}`);
-    yield call(setCookie, 'access_token', response.data.token);
-    yield call(setCookie, 'refresh_token', response.data.refreshToken);
-    yield put(AuthCreators.getLoginRefreshTokenSuccess(response.data));
+    yield call(setCookie, 'token', response.data.token);
+    yield call(setCookie, 'refreshToken', response.data.refreshToken);
+    yield put(AuthCreators.getSuccess(response.data));
   } catch (e) {
     if (e.status === 401) {
       yield put(AuthCreators.getLoginRefreshTokenFailure());

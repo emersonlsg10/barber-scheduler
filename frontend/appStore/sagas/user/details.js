@@ -2,7 +2,7 @@ import { call, put, all, takeLatest } from 'redux-saga/effects';
 import {
   Creators as UserDetailsCreators,
   Types as UserDetailsTypes,
-} from 'appStore/ducks/user/details';
+} from 'appStore/ducks/schedules/list';
 import api from 'services/api';
 import { callApi } from 'appStore/sagas/auth';
 import interceptResponse from 'services/interceptResponse';
