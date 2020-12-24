@@ -5,7 +5,7 @@ export const Types = {
 };
 
 const initialState = {
-  users: null,
+  data: null,
   loading: false,
   error: null,
 };
@@ -19,10 +19,10 @@ export default function (state = initialState, action) {
         ...state,
         loading: false,
         error: null,
-        users: action.payload.users,
+        data: action.payload.data,
       };
     case Types.GET_FAILURE:
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, data: null, error: action.payload };
     default:
       return state;
   }
@@ -33,9 +33,9 @@ export const Creators = {
     type: Types.GET_REQUEST,
     payload: formData,
   }),
-  getSuccess: (data, total) => ({
+  getSuccess: data => ({
     type: Types.GET_SUCCESS,
-    payload: { data, total },
+    payload: { data },
   }),
   getFailure: error => ({
     type: Types.GET_FAILURE,

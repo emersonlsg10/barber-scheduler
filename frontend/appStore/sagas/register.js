@@ -1,6 +1,4 @@
 import { call, put, all, takeLatest, delay } from 'redux-saga/effects';
-import Notifications from 'react-notification-system-redux';
-import Router from 'next/router';
 import {
   Creators as RegisterUserCreators,
   Types as RegisterUserTypes,
@@ -24,11 +22,10 @@ function* getRegister({ payload }) {
     yield interceptResponse(response);
     yield delay(1000);
     yield put(RegisterUserCreators.getSuccess(response.data));
-    yield put(alert(response.data.msg));
-    yield call(Router.push, { pathname: '/login' });
+    // yield call(Router.push, { pathname: '/login' });
   } catch (err) {
     yield interceptError(RegisterUserCreators.getFailure, err);
-    yield put(alert(err.data.msg));
+    // yield put(alert(err.data.msg));
   }
 }
 
