@@ -24,6 +24,9 @@ const useStyles = makeStyles(() => ({
   loginLogo: {
     marginBottom: 10,
   },
+  titleDiv: {
+    textAlign: 'center',
+  },
 }));
 
 function LoginScreen({ query }) {
@@ -55,6 +58,11 @@ function LoginScreen({ query }) {
                 className={classes.loginLogo}
                 width="70%"
               />
+            </div>
+            <div className={classes.titleDiv}>
+              <span style={{ fontSize: 35, fontWeight: 'lighter' }}>
+                <strong>Login</strong>
+              </span>
             </div>
             <LoginForm onSubmit={onSubmit} isLoading={loading} />
           </Card>

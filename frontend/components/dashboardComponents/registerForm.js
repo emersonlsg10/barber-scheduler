@@ -1,6 +1,7 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import CustomTextField from 'components/form/CustomTextField';
+import Link from 'next/link';
 import * as Yup from 'yup';
 import Grid from '@material-ui/core/Grid';
 import { Button } from '@material-ui/core';
@@ -215,6 +216,7 @@ const registerForm = ({
                     xs={12}
                     style={{
                       display: 'flex',
+                      flexDirection: 'column',
                       justifyContent: 'center',
                       marginBottom: 20,
                     }}>
@@ -223,7 +225,7 @@ const registerForm = ({
                       onClick={handleSubmit}
                       style={{
                         backgroundColor: '#D36821',
-                        width: 230,
+                        width: '100%',
                         borderRadius: 20,
                         color: 'white',
                         marginTop: 30,
@@ -232,6 +234,28 @@ const registerForm = ({
                       startIcon={loading && <CircularProgress size={16} />}>
                       Cadastrar
                     </Button>
+                    <Link href="/login">
+                      <a
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          textDecoration: 'none',
+                        }}>
+                        <Button
+                          type="submit"
+                          style={{
+                            backgroundColor: 'blue',
+                            width: '100%',
+                            borderRadius: 20,
+                            color: 'white',
+                            marginTop: 30,
+                          }}
+                          variant="contained">
+                          Voltar
+                        </Button>
+                      </a>
+                    </Link>
                   </Grid>
                 </Grid>
               </div>
