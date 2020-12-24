@@ -16,6 +16,10 @@ const useStyles = makeStyles(theme => ({
     marginLeft: 10,
     marginTop: 35,
   },
+  greetings: {
+    fontSize: 20,
+    margin: '15px 0 0 8px',
+  },
 }));
 
 
@@ -26,8 +30,7 @@ export default function Index() {
   const {
     data: dataUser,
     loading: loadingUser,
-  } = useSelector(state => state.user);
-
+  } = useSelector(state => state.user.details);
   return (
     <>
       <Layout maxWidth={false}>
@@ -47,14 +50,11 @@ export default function Index() {
   );
 }
 
-const Greetings = ({ user }) => {
+const Greetings = ({ name }) => {
+  const classes = useStyles();
   return (
-    <div>Olá: {user?.name}</div>
+    <div className={classes.greetings}>Olá <strong>{name}</strong>, seja bem vindo!</div>
   )
 };
 
-Index.getInitialProps = async ({ store }) => {
-  store.dispatch(
-    UserDetailsCreators.getRequest()
-  );
-};
+Index.getInitialProps = async ({ store }) => { };
