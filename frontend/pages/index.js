@@ -6,9 +6,7 @@ import CalendarPicker from 'components/CalendarPicker';
 import SchedulesDay from 'components/SchedulesDay';
 import { Container, makeStyles } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Creators as UserDetailsCreators,
-} from 'appStore/ducks/user/details';
+import { Creators as UserDetailsCreators } from 'appStore/ducks/user/details';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -32,14 +30,17 @@ export default function Index() {
     loading: loadingUser,
   } = useSelector(state => state.user.details);
 
+  const {
+    data: dataSchedules,
+    loading: loadingSchedules,
+  } = useSelector(state => state.schedules.list);
+
   const { refreshToken } = useSelector(state => state.auth);
-  console.log(refreshToken, 'refreshToken');
   useEffect(() => {
     if (!loadingUser) {
       dispatch(UserDetailsCreators.getRequest())
     }
   }, []);
-
   return (
     <>
       <Layout maxWidth={false}>
@@ -51,7 +52,7 @@ export default function Index() {
             display: 'flex',
             justifyContent: 'center',
           }}>
-            <SchedulesDay />
+            <SchedulesDay dataSchedules={dataSchedules ? dataSchedules?.data : []} loading={loadingSchedules} />
           </div>
         </Container>
       </Layout>

@@ -1,5 +1,7 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, { useState } from 'react';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import ModalScheduler from 'components/modalScheduler';
@@ -29,6 +31,10 @@ const useStyles = makeStyles(theme => ({
   button: {
     margin: theme.spacing(1),
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
 }));
 
 const configs = {
@@ -50,10 +56,10 @@ const configs = {
   perHour: ['00', '15', '30', '45'],
 };
 
-export default function SchedulesDay() {
+export default function SchedulesDay({ dataSchedules, loading }) {
   const classes = useStyles();
 
-  const [openModal, setOpenModal] = React.useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = (hour, min) => {
     setTimeout(() => {
       setOpenModal(true);
@@ -65,26 +71,40 @@ export default function SchedulesDay() {
     setOpenModal(false);
   };
 
+  const verifyHourSchedule = hour => {
+    return dataSchedules?.find(item => item.schedule === hour);
+  }
+
   return (
     <div className={classes.root}>
       <List component="nav" className={classes.list} aria-label="main mailbox folders">
-        {configs.hoursPerDays.map((hour, index) => (
+        {!loading && !!dataSchedules && configs.hoursPerDays.map((hour, index) => (
           <>
             {configs.perHour.map(min => (
               <>
-                <ListItem key={index} onClick={() => handleOpenModal(hour, min)} button className={classes.listItem}>
+                {verifyHourSchedule(`${hour}:${min}:00`) ? (
+                <ListItem key={index} button className={classes.listItem}>
+                  <ListItemIcon>
+                    <AccessTimeIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={`${hour}:${min}`} />
+                  Reservado
+                </ListItem>) : (<ListItem key={index} onClick={() => handleOpenModal(hour, min)} button className={classes.listItem}>
                   <ListItemIcon>
                     <AccessTimeIcon />
                   </ListItemIcon>
                   <ListItemText primary={`${hour}:${min}`} />
                   <AddCircleOutlineIcon />
-                </ListItem>
+                </ListItem>)}
                 <Divider />
               </>
             ))}
           </>
         ))}
       </List>
+      <Backdrop className={classes.backdrop} open={loading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Modal
         open={openModal}
         onClose={handleCloseModal}

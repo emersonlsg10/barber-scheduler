@@ -57,7 +57,7 @@ function* getRefreshToken() {
     yield call(api.setHeader, 'Authorization', `Bearer ${response.data.token}`);
     yield call(setCookie, 'token', response.data.token);
     yield call(setCookie, 'refreshToken', response.data.refreshToken);
-    yield put(AuthCreators.getSuccess(response.data));
+    yield put(AuthCreators.getLoginRefreshTokenSuccess(response.data));
   } catch (e) {
     if (e.status === 401) {
       yield put(AuthCreators.getLoginRefreshTokenFailure());

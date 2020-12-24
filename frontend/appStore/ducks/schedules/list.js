@@ -1,11 +1,12 @@
 export const Types = {
-  GET_REQUEST: 'user-details/GET_REQUEST',
-  GET_SUCCESS: 'user-details/GET_SUCCESS',
-  GET_FAILURE: 'user-details/GET_FAILURE',
+  GET_REQUEST: 'schedule-list/GET_REQUEST',
+  GET_SUCCESS: 'schedule-list/GET_SUCCESS',
+  GET_FAILURE: 'schedule-list/GET_FAILURE',
 };
 
 const initialState = {
   data: null,
+  total: null,
   loading: false,
   error: null,
 };
@@ -20,6 +21,7 @@ export default function (state = initialState, action) {
         loading: false,
         error: null,
         data: action.payload.data,
+        total: action.payload.total,
       };
     case Types.GET_FAILURE:
       return { ...state, loading: false, error: action.payload };
@@ -29,13 +31,13 @@ export default function (state = initialState, action) {
 }
 
 export const Creators = {
-  getRequest: page => ({
+  getRequest: formData => ({
     type: Types.GET_REQUEST,
-    payload: { page },
+    payload: formData,
   }),
-  getSuccess: ({ data }) => ({
+  getSuccess: ({ data, total }) => ({
     type: Types.GET_SUCCESS,
-    payload: { data },
+    payload: { data, total },
   }),
   getFailure: error => ({
     type: Types.GET_FAILURE,
