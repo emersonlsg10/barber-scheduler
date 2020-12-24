@@ -9,10 +9,9 @@ export const setCookie = (key, value) => {
   }
 };
 
-export const removeCookie = key => {
+export const removeCookie = (key) => {
   if (process.browser) {
     cookie.remove(key, {
-      path: '/',
       expires: 1,
     });
   }
@@ -33,5 +32,6 @@ const getCookieFromServer = (key, req) => {
   return rawCookie.split('=')[1];
 };
 
-export const getCookie = (key, req) =>
-  process.browser ? getCookieFromBrowser(key) : getCookieFromServer(key, req);
+export const getCookie = (key, req) => (process.browser
+  ? getCookieFromBrowser(key)
+  : getCookieFromServer(key, req));

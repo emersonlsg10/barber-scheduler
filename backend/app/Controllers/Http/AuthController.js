@@ -8,6 +8,11 @@ class AuthController {
         return await auth.withRefreshToken().attempt(uid, password)
     }
 
+    async refresh({ auth, request }) {
+        const refreshToken = request.input('refresh_token')
+        return await auth.generateForRefreshToken(refreshToken, true)
+    }
+
     async show({ auth, response }) {
         return await formatResponse({
             response,

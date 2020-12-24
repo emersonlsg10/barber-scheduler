@@ -22,6 +22,7 @@ Route.get('/', () => {
 
 Route.group(() => {
   Route.post('login', 'AuthController.login')
+  Route.post('oauth/refresh', 'AuthController.refresh')
 
   Route.post('register', 'AuthController.store')
 

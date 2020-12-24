@@ -1,20 +1,18 @@
 export const Types = {
-  GET_REQUEST: 'login-auth/GET_REQUEST',
-  GET_SUCCESS: 'login-auth/GET_SUCCESS',
-  GET_FAILURE: 'login-auth/GET_FAILURE',
-
-  GET_LOGOUT_REQUEST: 'login-auth/GET_LOGOUT_REQUEST',
-  GET_LOGOUT_SUCCESS: 'login-auth/GET_LOGOUT_SUCCESS',
-
+  GET_SUCCESS: 'auth/GET_SUCCESS',
   // Type para refresh token
   GET_REFRESH_TOKEN_REQUEST: 'auth/GET_REFRESH_TOKEN_REQUEST',
   GET_REFRESH_TOKEN_SUCCESS: 'auth/GET_REFRESH_TOKEN_SUCCESS',
   GET_REFRESH_TOKEN_FAILURE: 'auth/GET_REFRESH_TOKEN_FAILURE',
+  // LOGOUT
+  GET_LOGOUT_SUCCESS: 'auth/GET_LOGOUT_SUCCESS',
+  GET_LOGOUT_REQUEST: 'auth/GET_LOGOUT_REQUEST',
 };
 
 const initialState = {
-  data: [],
   token: '',
+  refreshToken: '',
+  isAuth: false,
   loading: false,
   error: null,
 };
@@ -23,15 +21,16 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case Types.GET_REQUEST:
       return { ...state, loading: true, error: null };
-    case Types.GET_SUCCESS:
+    case Types.GET_SUCCESS || Types.GET_REFRESH_TOKEN_SUCCESS:
       return {
-        data: action.payload.funcionario,
         token: action.payload.token,
+        refreshToken: action.payload.refreshToken,
+        isAuth: true,
         loading: false,
         error: null,
       };
     case Types.GET_FAILURE:
-      return { ...state, loading: false, error: action.payload };
+      return { ...initialState, error: action.payload };
     case Types.GET_LOGOUT_SUCCESS:
       return initialState;
     default:
@@ -40,17 +39,9 @@ export default function (state = initialState, action) {
 }
 
 export const Creators = {
-  getLoginRequest: ({ login, senha }) => ({
-    type: Types.GET_REQUEST,
-    payload: { login, senha },
-  }),
-  getLoginSuccess: ({ funcionario, token }) => ({
+  getSuccess: data => ({
     type: Types.GET_SUCCESS,
-    payload: { funcionario, token },
-  }),
-  getLoginFailure: error => ({
-    type: Types.GET_FAILURE,
-    payload: error,
+    payload: data,
   }),
   getLogoutRequest: () => ({
     type: Types.GET_LOGOUT_REQUEST,
