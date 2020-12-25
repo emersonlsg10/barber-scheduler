@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function ModalFails({ error, setOpenModalFail }) {
+function ModalFails({ error, setOpenModalFail, showButton = true }) {
   const classes = useStyles();
 
   return (
@@ -42,26 +42,28 @@ function ModalFails({ error, setOpenModalFail }) {
           }}>
           <div>
             <ErrorOutlineIcon
-              style={{ color: 'red', width: 100, height: 100 }}
+              style={{ color: '#b63d1b', width: 100, height: 100 }}
             />
           </div>
           <div>
             <h3>{error && error}</h3>
           </div>
-          <div className={classes.logoDiv}>
-            <Button
-              onClick={() => setOpenModalFail(false)}
-              style={{
-                backgroundColor: '#D36821',
-                width: 230,
-                borderRadius: 20,
-                color: 'white',
-                marginTop: 30,
-              }}
-              variant="contained">
-              Tentar novamente
-            </Button>
-          </div>
+          {showButton && (
+            <div className={classes.logoDiv}>
+              <Button
+                onClick={() => setOpenModalFail(false)}
+                style={{
+                  backgroundColor: '#D36821',
+                  width: 230,
+                  borderRadius: 20,
+                  color: 'white',
+                  marginTop: 30,
+                }}
+                variant="contained">
+                Tentar novamente
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </>

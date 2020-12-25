@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from 'components/layout';
 import CalendarPicker from 'components/CalendarPicker';
 import SchedulesDay from 'components/SchedulesDay';
-import { Container, makeStyles } from '@material-ui/core';
+import { Container, makeStyles, Modal } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
+import ModalFails from 'components/modalFails';
 import { Creators as UserDetailsCreators } from 'appStore/ducks/user/details';
 import { Creators as ServicesListCreators } from 'appStore/ducks/services/list';
 import { Creators as SchedulesDetailsCreators } from 'appStore/ducks/schedules/details';
@@ -21,6 +22,26 @@ const useStyles = makeStyles(theme => ({
   greetings: {
     fontSize: 20,
     margin: '15px 0 0 0px',
+  },
+  modal: {
+    color: '#fff',
+    position: 'absolute',
+    width: 450,
+    '@media (min-width: 600px)': {
+      top: `50%`,
+      left: `50%`,
+      transform: `translate(-50%, -50%)`,
+    },
+    '@media (max-width: 600px)': {
+      width: '90%',
+      top: `30%`,
+      left: '50%',
+      transform: `translate(-50%)`,
+    },
+    backgroundColor: '#252525',
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
   },
 }));
 
@@ -44,13 +65,30 @@ export default function Index() {
     loading: loadingServices,
   } = useSelector(state => state.services.list);
 
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const [openModalFail, setOpenModalFail] = useState(false);
+  const handleCloseModal = () => {
+    setOpenModalFail(false);
+  };
+
+  const handleOpenModal = () => {
+    setOpenModalFail(true);
+  };
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const getSchedulesDay = () => {
-    dispatch(
-      SchedulesListDetailsCreators.getRequest({
-        date: moment(selectedDate).format('YYYY-MM-DD'),
-      })
-    );
+
+    var date = moment(selectedDate).format('YYYY-MM-DD')
+    var now = moment().format('YYYY-MM-DD');
+    
+    if (now > date) {
+      handleOpenModal();
+    } else {
+      dispatch(
+        SchedulesListDetailsCreators.getRequest({
+          date: moment(selectedDate).format('YYYY-MM-DD'),
+        })
+      );
+    }
+
   };
 
   const getSchedulesDetails = schedule => {
@@ -95,6 +133,17 @@ export default function Index() {
             />
           </div>
         </Container>
+        <Modal
+        open={openModalFail}
+        onClose={handleCloseModal}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description">
+        <ModalFails
+          error={'Não é possível agendar pra ontem.'}
+          setOpenModalFail={setOpenModalFail}
+          showButton={false}
+        />
+      </Modal>
       </Layout>
     </>
   );
