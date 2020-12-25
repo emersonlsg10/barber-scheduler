@@ -51,7 +51,7 @@ export default function MaterialUIPickers() {
           width: 100% !important;
         }
         .MuiFormLabel-root {
-          font-size: 25px;
+          font-size: 22px;
           font-weight: bolder;
           color: #eb961f !important;
         }

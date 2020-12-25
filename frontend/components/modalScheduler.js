@@ -45,24 +45,31 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function ModalScheduler({ dataServices, loadingServices }) {
+function ModalScheduler({
+  dataServices,
+  loadingServices,
+  razao,
+  selectedTime,
+  limitTimeService,
+}) {
   const classes = useStyles();
 
   const [state, setState] = React.useState(null);
 
   const handleChange = (event, rowData) => {
-    console.log(rowData)
+    console.log(rowData, razao, selectedTime);
     setState({ ...state, [event.target.name]: event.target.checked });
   };
-  // { ...item, checked: item.checked }
+
+  const filterLimitTime = item => item.time <= limitTimeService * razao;
 
   useEffect(() => {
     if (!loadingServices && dataServices) {
-      dataServices?.data.map(item => ({
+      dataServices?.data.filter(filterLimitTime).map(item => ({
         [item.name]: false,
       }));
       setState(
-        dataServices?.data.map(item => ({
+        dataServices?.data.filter(filterLimitTime).map(item => ({
           [item.name]: false,
         }))
       );
@@ -72,25 +79,29 @@ function ModalScheduler({ dataServices, loadingServices }) {
     <>
       <div className={classes.modal}>
         <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">Selecione os serviços:</FormLabel>
+          <FormLabel component="legend">
+            Escolha os serviços disponíveis no horário selecionado:
+          </FormLabel>
           <FormGroup style={{ marginTop: 20 }}>
             {dataServices?.data.length > 0 &&
-              dataServices?.data.map(item => (
-                <FormControlLabel
-                  key={item.id}
-                  control={
-                    <Checkbox
-                      checked={item.checked}
-                      onChange={e => handleChange(e, item)}
-                      color="primary"
-                      name={item.name}
-                    />
-                  }
-                  label={`${item.name} - ${appUtils.formatPrice(
-                    item.price
-                  )} - ${item.time} min`}
-                />
-              ))}
+              dataServices?.data
+                .filter(filterLimitTime)
+                .map(item => (
+                  <FormControlLabel
+                    key={item.id}
+                    control={
+                      <Checkbox
+                        checked={item.checked}
+                        onChange={e => handleChange(e, item)}
+                        color="primary"
+                        name={item.name}
+                      />
+                    }
+                    label={`${item.name} - ${appUtils.formatPrice(
+                      item.price
+                    )} - ${item.time} min`}
+                  />
+                ))}
           </FormGroup>
         </FormControl>
         <Button

@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
 import Backdrop from '@material-ui/core/Backdrop';
+import moment from 'moment';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
@@ -54,29 +55,62 @@ const configs = {
     '19',
   ],
   perHour: ['00', '15', '30', '45'],
+  razao: 15,
 };
 
 export default function SchedulesDay({ dataSchedules, loading, dataServices, loadingServices }) {
   const classes = useStyles();
 
   const [openModal, setOpenModal] = useState(false);
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [limitTimeService, setLimitTimeService] = useState(null);
+
+  const verifyHourSchedule = hour => {
+    return dataSchedules?.find(item => item.schedule === hour);
+  }
+
   const handleOpenModal = (hour, min) => {
     setTimeout(() => {
       setOpenModal(true);
     }, 150)
-    console.log(hour, min);
+    const formatedHour = `${hour}:${min}:00`;
+    setSelectedTime(formatedHour);
+    countLimit(hour, min);
+  };
+
+  const countLimit = (hour, min) => {
+    let count = 1;
+    let scanTime = 120; // minutes
+    let tempRazao = configs.razao;
+    let tempHour = `${hour}:${min}`;
+    let firstOneFounded = null;
+
+    for (let i = 0; i < scanTime / tempRazao; i++) {
+
+
+      tempHour = moment(tempHour, 'HH:mm').add(tempRazao, 'minutes').format('HH:mm');
+      console.log(tempHour, 'verificando', !!verifyHourSchedule(`${tempHour}:00`));
+      if (verifyHourSchedule(`${tempHour}:00`)) {
+        firstOneFounded = tempHour;
+        continue;
+      } else {
+        if (!firstOneFounded)
+          count++
+      }
+    }
+    setLimitTimeService(count);
+    console.log(count);
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
   };
 
-  const verifyHourSchedule = hour => {
-    return dataSchedules?.find(item => item.schedule === hour);
-  }
-
   return (
     <div className={classes.root}>
+      <Backdrop className={classes.backdrop} open={loading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <List component="nav" className={classes.list} aria-label="main mailbox folders">
         {!loading && !!dataSchedules && configs.hoursPerDays.map((hour, index) => (
           <>
@@ -103,15 +137,17 @@ export default function SchedulesDay({ dataSchedules, loading, dataServices, loa
           </>
         ))}
       </List>
-      <Backdrop className={classes.backdrop} open={loading}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
       <Modal
         open={openModal}
         onClose={handleCloseModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description">
-        <ModalScheduler dataServices={dataServices} loadingServices={loadingServices} />
+        <ModalScheduler
+          dataServices={dataServices}
+          loadingServices={loadingServices}
+          selectedTime={selectedTime}
+          limitTimeService={limitTimeService && limitTimeService}
+          razao={configs.razao} />
       </Modal>
     </div>
   );
