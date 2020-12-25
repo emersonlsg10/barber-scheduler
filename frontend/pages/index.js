@@ -75,20 +75,11 @@ export default function Index() {
   };
   const [selectedDate, setSelectedDate] = useState(new Date());
   const getSchedulesDay = () => {
-
-    var date = moment(selectedDate).format('YYYY-MM-DD')
-    var now = moment().format('YYYY-MM-DD');
-    
-    if (now > date) {
-      handleOpenModal();
-    } else {
-      dispatch(
-        SchedulesListDetailsCreators.getRequest({
-          date: moment(selectedDate).format('YYYY-MM-DD'),
-        })
-      );
-    }
-
+    dispatch(
+      SchedulesListDetailsCreators.getRequest({
+        date: moment(selectedDate).format('YYYY-MM-DD'),
+      })
+    );
   };
 
   const getSchedulesDetails = schedule => {
@@ -101,7 +92,17 @@ export default function Index() {
   };
 
   useEffect(() => {
-    getSchedulesDay();
+
+    var date = moment(selectedDate).format('YYYY-MM-DD')
+    var now = moment().format('YYYY-MM-DD');
+
+    if (now > date) {
+      handleOpenModal();
+      setSelectedDate(new Date());
+    } else {
+      getSchedulesDay();
+    }
+
   }, [selectedDate]);
 
   useEffect(() => {
@@ -134,16 +135,16 @@ export default function Index() {
           </div>
         </Container>
         <Modal
-        open={openModalFail}
-        onClose={handleCloseModal}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description">
-        <ModalFails
-          error={'Não é possível agendar pra ontem.'}
-          setOpenModalFail={setOpenModalFail}
-          showButton={false}
-        />
-      </Modal>
+          open={openModalFail}
+          onClose={handleCloseModal}
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description">
+          <ModalFails
+            error={'Não é possível agendar pra ontem.'}
+            setOpenModalFail={setOpenModalFail}
+            showButton={false}
+          />
+        </Modal>
       </Layout>
     </>
   );
