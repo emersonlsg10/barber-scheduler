@@ -7,9 +7,10 @@ import SchedulesDay from 'components/SchedulesDay';
 import { Container, makeStyles } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { Creators as UserDetailsCreators } from 'appStore/ducks/user/details';
-import {
-  Creators as ServicesListCreators,
-} from 'appStore/ducks/services/list';
+import { Creators as ServicesListCreators } from 'appStore/ducks/services/list';
+import { Creators as SchedulesDetailsCreators } from 'appStore/ducks/schedules/details';
+import moment from 'moment';
+import { Creators as SchedulesListDetailsCreators } from 'appStore/ducks/schedules/list';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -43,19 +44,42 @@ export default function Index() {
     loading: loadingServices,
   } = useSelector(state => state.services.list);
 
-  const { refreshToken } = useSelector(state => state.auth);
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const getSchedulesDay = () => {
+    dispatch(
+      SchedulesListDetailsCreators.getRequest({
+        date: moment(selectedDate).format('YYYY-MM-DD'),
+      })
+    );
+  };
+
+  const getSchedulesDetails = schedule => {
+    dispatch(
+      SchedulesDetailsCreators.getRequest({
+        date: moment(selectedDate).format('YYYY-MM-DD'),
+        schedule,
+      })
+    );
+  };
+
+  useEffect(() => {
+    getSchedulesDay();
+  }, [selectedDate]);
+
   useEffect(() => {
     if (!loadingUser) {
       dispatch(UserDetailsCreators.getRequest())
     }
-  dispatch(ServicesListCreators.getRequest())
+    getSchedulesDay();
+    dispatch(ServicesListCreators.getRequest());
   }, []);
+
   return (
     <>
       <Layout maxWidth={false}>
         <Container maxWidth={'lg'}>
           <Greetings name={dataUser?.username} />
-          <CalendarPicker />
+          <CalendarPicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
           <h3 className={classes.title}>Selecione um horário: </h3>
           <div style={{
             display: 'flex',
@@ -63,9 +87,11 @@ export default function Index() {
           }}>
             <SchedulesDay
               dataSchedules={dataSchedules ? dataSchedules?.data : []}
-              loading={loadingSchedules}
+              loadingSchedules={loadingSchedules}
               dataServices={dataServices}
               loadingServices={loadingServices}
+              getSchedulesDay={getSchedulesDay}
+              getSchedulesDetails={getSchedulesDetails}
             />
           </div>
         </Container>

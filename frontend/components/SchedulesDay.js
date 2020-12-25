@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Backdrop from '@material-ui/core/Backdrop';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
@@ -58,9 +59,19 @@ const configs = {
   razao: 15,
 };
 
-export default function SchedulesDay({ dataSchedules, loading, dataServices, loadingServices }) {
+export default function SchedulesDay({ 
+  dataSchedules, 
+  loadingSchedules,
+  dataServices, 
+  loadingServices, 
+  getSchedulesDetails, 
+  getSchedulesDay
+ }) {
   const classes = useStyles();
-
+  const {
+    data: dataScheduleDetails,
+    loading: loadingScheduleDetails,
+  } = useSelector(state => state.schedules.details);
   const [openModal, setOpenModal] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
   const [limitTimeService, setLimitTimeService] = useState(null);
@@ -70,27 +81,26 @@ export default function SchedulesDay({ dataSchedules, loading, dataServices, loa
   }
 
   const handleOpenModal = (hour, min) => {
-    setTimeout(() => {
-      setOpenModal(true);
-    }, 150)
     const formatedHour = `${hour}:${min}:00`;
     setSelectedTime(formatedHour);
-    countLimit(hour, min);
+    getSchedulesDetails(formatedHour);
   };
 
-  const countLimit = (hour, min) => {
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const countLimit = schedule => {
     let count = 1;
     let scanTime = 120; // minutes
     let tempRazao = configs.razao;
-    let tempHour = `${hour}:${min}`;
+    let tempHour = `${schedule}`;
     let firstOneFounded = null;
 
     for (let i = 0; i < scanTime / tempRazao; i++) {
-
-
-      tempHour = moment(tempHour, 'HH:mm').add(tempRazao, 'minutes').format('HH:mm');
-      console.log(tempHour, 'verificando', !!verifyHourSchedule(`${tempHour}:00`));
-      if (verifyHourSchedule(`${tempHour}:00`)) {
+      tempHour = moment(tempHour, 'HH:mm:ss').add(tempRazao, 'minutes').format('HH:mm:ss');
+      console.log(tempHour, 'verificando', !!verifyHourSchedule(`${tempHour}`));
+      if (verifyHourSchedule(`${tempHour}`)) {
         firstOneFounded = tempHour;
         continue;
       } else {
@@ -102,17 +112,24 @@ export default function SchedulesDay({ dataSchedules, loading, dataServices, loa
     console.log(count);
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
+  useEffect(() => {
+    if (!loadingScheduleDetails && dataScheduleDetails && dataScheduleDetails.length === 0) {
+      if (!loadingSchedules && dataSchedules && !verifyHourSchedule(selectedTime)) {
+        setOpenModal(true);
+        countLimit(selectedTime);
+      }
+    } else {
+      getSchedulesDay();
+    }
+  }, [dataScheduleDetails])
 
   return (
     <div className={classes.root}>
-      <Backdrop className={classes.backdrop} open={loading}>
+      <Backdrop className={classes.backdrop} open={loadingScheduleDetails || loadingSchedules}>
         <CircularProgress color="inherit" />
       </Backdrop>
       <List component="nav" className={classes.list} aria-label="main mailbox folders">
-        {!loading && !!dataSchedules && configs.hoursPerDays.map((hour, index) => (
+        {configs.hoursPerDays.map((hour, index) => (
           <>
             {configs.perHour.map(min => (
               <>
@@ -122,14 +139,14 @@ export default function SchedulesDay({ dataSchedules, loading, dataServices, loa
                       <AccessTimeIcon />
                     </ListItemIcon>
                     <ListItemText primary={`${hour}:${min}`} />
-                  Reservado
+                  Reservado por outra pessoa
                   </ListItem>) : (
                     <ListItem key={index} onClick={() => handleOpenModal(hour, min)} button className={classes.listItem}>
                       <ListItemIcon>
                         <AccessTimeIcon />
                       </ListItemIcon>
                       <ListItemText primary={`${hour}:${min}`} />
-                      <AddCircleOutlineIcon />
+                      {(loadingScheduleDetails || loadingSchedules) && selectedTime === `${hour}:${min}:00` ? <CircularProgress color="primary" size={16} /> : <AddCircleOutlineIcon />}
                     </ListItem>)}
                 <Divider />
               </>
@@ -143,7 +160,7 @@ export default function SchedulesDay({ dataSchedules, loading, dataServices, loa
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description">
         <ModalScheduler
-          dataServices={dataServices}
+          dataServices={dataServices ? dataServices?.data : []}
           loadingServices={loadingServices}
           selectedTime={selectedTime}
           limitTimeService={limitTimeService && limitTimeService}

@@ -73,8 +73,9 @@ class ScheduleController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async show({ params, request, response }) {
-    const schedules = await Schedule.query().where('client_id', params.id).fetch();
+  async show({ request, response }) {
+    const { date, schedule} = request.all();
+    const schedules = await Schedule.query().where('date', date).where('schedule', schedule).fetch();
     return formatResponse({
       response,
       status: 200,

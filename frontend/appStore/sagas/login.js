@@ -1,7 +1,7 @@
 import { call, put, all, takeLatest, delay } from 'redux-saga/effects';
 import Router from 'next/router';
 // import { Creators as ProfileCreators } from 'appStore/ducks/perfil';
-import { Creators as UserCreators } from 'appStore/ducks/schedules/list';
+import { Creators as UserCreators } from 'appStore/ducks/user/details';
 import { Creators as AuthCreators } from 'appStore/ducks/auth';
 import {
   Creators as LoginCreators,

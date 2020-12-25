@@ -65,11 +65,11 @@ function ModalScheduler({
 
   useEffect(() => {
     if (!loadingServices && dataServices) {
-      dataServices?.data.filter(filterLimitTime).map(item => ({
+      dataServices?.filter(filterLimitTime).map(item => ({
         [item.name]: false,
       }));
       setState(
-        dataServices?.data.filter(filterLimitTime).map(item => ({
+        dataServices?.filter(filterLimitTime).map(item => ({
           [item.name]: false,
         }))
       );
@@ -83,8 +83,9 @@ function ModalScheduler({
             Escolha os serviços disponíveis no horário selecionado:
           </FormLabel>
           <FormGroup style={{ marginTop: 20 }}>
-            {dataServices?.data.length > 0 &&
-              dataServices?.data
+            {dataServices &&
+              dataServices?.length > 0 &&
+              dataServices
                 .filter(filterLimitTime)
                 .map(item => (
                   <FormControlLabel
