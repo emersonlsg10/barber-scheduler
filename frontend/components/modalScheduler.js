@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core';
 import { Button, CircularProgress } from '@material-ui/core';
+import appUtils from 'utils/appUtils';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -44,60 +45,51 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function ModalScheduler() {
+function ModalScheduler({ dataServices, loadingServices }) {
   const classes = useStyles();
 
-  const [state, setState] = React.useState({
-    gilad: true,
-    jason: false,
-    antoine: false,
-  });
+  const [state, setState] = React.useState(null);
 
   const handleChange = event => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
+  // { ...item, checked: item.checked }
 
-  const { gilad, jason, antoine } = state;
-
+  useEffect(() => {
+    if (!loadingServices && dataServices) {
+      dataServices?.data.map(item => ({
+        [item.name]: false,
+      }));
+      setState(
+        dataServices?.data.map(item => ({
+          [item.name]: false,
+        }))
+      );
+    }
+  }, [dataServices]);
   return (
     <>
       <div className={classes.modal}>
         <FormControl component="fieldset" className={classes.formControl}>
           <FormLabel component="legend">Selecione os serviços:</FormLabel>
           <FormGroup>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={gilad}
-                  onChange={handleChange}
-                  color="primary"
-                  name="gilad"
+            {dataServices?.data.length > 0 &&
+              dataServices?.data.map(item => (
+                <FormControlLabel
+                  key={item.id}
+                  control={
+                    <Checkbox
+                      checked={item.checked}
+                      onChange={handleChange}
+                      color="primary"
+                      name={item.name}
+                    />
+                  }
+                  label={`${item.name} - ${appUtils.formatPrice(
+                    item.price
+                  )} - ${item.time} min`}
                 />
-              }
-              label="Corte de cabelo"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={jason}
-                  onChange={handleChange}
-                  color="primary"
-                  name="jason"
-                />
-              }
-              label="Barba"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={antoine}
-                  onChange={handleChange}
-                  name="antoine"
-                  color="primary"
-                />
-              }
-              label="Sombrancelha"
-            />
+              ))}
           </FormGroup>
         </FormControl>
         <Button

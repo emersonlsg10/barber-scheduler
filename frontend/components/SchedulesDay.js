@@ -56,7 +56,7 @@ const configs = {
   perHour: ['00', '15', '30', '45'],
 };
 
-export default function SchedulesDay({ dataSchedules, loading }) {
+export default function SchedulesDay({ dataSchedules, loading, dataServices, loadingServices }) {
   const classes = useStyles();
 
   const [openModal, setOpenModal] = useState(false);
@@ -83,19 +83,20 @@ export default function SchedulesDay({ dataSchedules, loading }) {
             {configs.perHour.map(min => (
               <>
                 {verifyHourSchedule(`${hour}:${min}:00`) ? (
-                <ListItem key={index} button className={classes.listItem}>
-                  <ListItemIcon>
-                    <AccessTimeIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={`${hour}:${min}`} />
+                  <ListItem key={index} button className={classes.listItem}>
+                    <ListItemIcon>
+                      <AccessTimeIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={`${hour}:${min}`} />
                   Reservado
-                </ListItem>) : (<ListItem key={index} onClick={() => handleOpenModal(hour, min)} button className={classes.listItem}>
-                  <ListItemIcon>
-                    <AccessTimeIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={`${hour}:${min}`} />
-                  <AddCircleOutlineIcon />
-                </ListItem>)}
+                  </ListItem>) : (
+                    <ListItem key={index} onClick={() => handleOpenModal(hour, min)} button className={classes.listItem}>
+                      <ListItemIcon>
+                        <AccessTimeIcon />
+                      </ListItemIcon>
+                      <ListItemText primary={`${hour}:${min}`} />
+                      <AddCircleOutlineIcon />
+                    </ListItem>)}
                 <Divider />
               </>
             ))}
@@ -110,7 +111,7 @@ export default function SchedulesDay({ dataSchedules, loading }) {
         onClose={handleCloseModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description">
-        <ModalScheduler />
+        <ModalScheduler dataServices={dataServices} loadingServices={loadingServices} />
       </Modal>
     </div>
   );
