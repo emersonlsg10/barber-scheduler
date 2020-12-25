@@ -14,13 +14,13 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     width: 450,
     '@media (min-width: 600px)': {
-      top: `50%`,
+      top: `30%`,
       left: `50%`,
-      transform: `translate(-50%, -50%)`,
+      transform: `translate(-30%, -50%)`,
     },
     '@media (max-width: 600px)': {
       width: '90%',
-      top: `30%`,
+      top: `20%`,
       left: '50%',
       transform: `translate(-50%)`,
     },
@@ -50,7 +50,8 @@ function ModalScheduler({ dataServices, loadingServices }) {
 
   const [state, setState] = React.useState(null);
 
-  const handleChange = event => {
+  const handleChange = (event, rowData) => {
+    console.log(rowData)
     setState({ ...state, [event.target.name]: event.target.checked });
   };
   // { ...item, checked: item.checked }
@@ -72,7 +73,7 @@ function ModalScheduler({ dataServices, loadingServices }) {
       <div className={classes.modal}>
         <FormControl component="fieldset" className={classes.formControl}>
           <FormLabel component="legend">Selecione os serviços:</FormLabel>
-          <FormGroup>
+          <FormGroup style={{ marginTop: 20 }}>
             {dataServices?.data.length > 0 &&
               dataServices?.data.map(item => (
                 <FormControlLabel
@@ -80,7 +81,7 @@ function ModalScheduler({ dataServices, loadingServices }) {
                   control={
                     <Checkbox
                       checked={item.checked}
-                      onChange={handleChange}
+                      onChange={e => handleChange(e, item)}
                       color="primary"
                       name={item.name}
                     />

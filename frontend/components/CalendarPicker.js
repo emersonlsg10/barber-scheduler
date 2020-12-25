@@ -48,7 +48,7 @@ export default function MaterialUIPickers() {
       </MuiPickersUtilsProvider>
       <style global jsx>{`
         .MuiTextField-root {
-          width: 96% !important;
+          width: 100% !important;
         }
         .MuiFormLabel-root {
           font-size: 25px;

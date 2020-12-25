@@ -14,12 +14,12 @@ import {
 const useStyles = makeStyles(theme => ({
   title: {
     color: theme.palette.primary.main,
-    marginLeft: 10,
+    // marginLeft: 10,
     marginTop: 35,
   },
   greetings: {
     fontSize: 20,
-    margin: '15px 0 0 8px',
+    margin: '15px 0 0 0px',
   },
 }));
 

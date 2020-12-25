@@ -15,12 +15,12 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%',
-    maxWidth: 360,
     backgroundColor: theme.palette.background.gray,
+    width: '100%',
   },
   list: {
     backgroundColor: theme.palette.background.primary,
+    width: '100%',
   },
   listItem: {
     height: 35,
