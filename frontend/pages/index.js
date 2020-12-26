@@ -131,6 +131,7 @@ export default function Index() {
               loadingServices={loadingServices}
               getSchedulesDay={getSchedulesDay}
               getSchedulesDetails={getSchedulesDetails}
+              selectedDate={selectedDate && moment(selectedDate).format('DD/MM/YYYY')}
             />
           </div>
         </Container>

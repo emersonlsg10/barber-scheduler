@@ -65,7 +65,8 @@ export default function SchedulesDay({
   dataServices, 
   loadingServices, 
   getSchedulesDetails, 
-  getSchedulesDay
+  getSchedulesDay,
+  selectedDate
  }) {
   const classes = useStyles();
   const {
@@ -113,8 +114,12 @@ export default function SchedulesDay({
   };
 
   useEffect(() => {
-    if (!loadingScheduleDetails && dataScheduleDetails && dataScheduleDetails.length === 0) {
-      if (!loadingSchedules && dataSchedules && !verifyHourSchedule(selectedTime)) {
+    setOpenModal(false);
+  }, [])
+
+  useEffect(() => {
+    if (!loadingScheduleDetails && !!dataScheduleDetails && dataScheduleDetails.length === 0) {
+      if (!loadingSchedules && selectedTime && !!dataSchedules && !verifyHourSchedule(selectedTime)) {
         setOpenModal(true);
         countLimit(selectedTime);
       }
@@ -164,6 +169,7 @@ export default function SchedulesDay({
           loadingServices={loadingServices}
           selectedTime={selectedTime}
           limitTimeService={limitTimeService && limitTimeService}
+          selectedDate={selectedDate}
           razao={configs.razao} />
       </Modal>
     </div>
