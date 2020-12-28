@@ -4,6 +4,7 @@ import auth from './auth';
 import userDetails from './user/details';
 import schedulesList from './schedules/list';
 import schedulesDetails from './schedules/details';
+import schedulesCreate from './schedules/create';
 import servicesList from './services/list';
 import login from './login';
 import register from './register';
@@ -18,6 +19,7 @@ export default combineReducers({
   schedules: combineReducers({
     list: schedulesList,
     details: schedulesDetails,
+    create: schedulesCreate,
   }),
   services: combineReducers({
     list: servicesList,

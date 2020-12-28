@@ -10,8 +10,9 @@ class ScheduleSchema extends Schema {
       table.date('date').nullable()
       table.time('schedule').nullable()
 
-      table.integer('service_id').unsigned()
-      table.foreign('service_id').references('services.id')
+      table.json('service_id').nullable()
+      table.float('total_time').nullable()
+      table.float('total_value').nullable()
 
       table.integer('client_id').unsigned()
       table.foreign('client_id').references('users.id')

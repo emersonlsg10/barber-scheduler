@@ -55,26 +55,33 @@ const configs = {
     '18',
     '19',
   ],
-  perHour: ['00', '15', '30', '45'],
-  razao: 15,
+  perHour: ['00', '30'],
+  razao: 30,
 };
 
-export default function SchedulesDay({ 
-  dataSchedules, 
+export default function SchedulesDay({
+  dataSchedules,
   loadingSchedules,
-  dataServices, 
-  loadingServices, 
-  getSchedulesDetails, 
+  dataServices,
+  loadingServices,
+  getSchedulesDetails,
   getSchedulesDay,
-  selectedDate
- }) {
+  selectedDate,
+  selectedTime,
+  setSelectedTime,
+  onSchedulerSubmit
+}) {
   const classes = useStyles();
   const {
     data: dataScheduleDetails,
     loading: loadingScheduleDetails,
   } = useSelector(state => state.schedules.details);
+
+  const {
+    loading: loadingScheduleCreate,
+  } = useSelector(state => state.schedules.create);
+
   const [openModal, setOpenModal] = useState(false);
-  const [selectedTime, setSelectedTime] = useState(null);
   const [limitTimeService, setLimitTimeService] = useState(null);
 
   const verifyHourSchedule = hour => {
@@ -144,7 +151,9 @@ export default function SchedulesDay({
                       <AccessTimeIcon />
                     </ListItemIcon>
                     <ListItemText primary={`${hour}:${min}`} />
-                  Reservado por outra pessoa
+                    <span style={{ fontStyle: 'italic', fontSize: 13 }}>
+                      Reservado por outra pessoa
+                    </span>
                   </ListItem>) : (
                     <ListItem key={index} onClick={() => handleOpenModal(hour, min)} button className={classes.listItem}>
                       <ListItemIcon>
@@ -170,6 +179,8 @@ export default function SchedulesDay({
           selectedTime={selectedTime}
           limitTimeService={limitTimeService && limitTimeService}
           selectedDate={selectedDate}
+          onSchedulerSubmit={onSchedulerSubmit}
+          loadingScheduleCreate={loadingScheduleCreate}
           razao={configs.razao} />
       </Modal>
     </div>

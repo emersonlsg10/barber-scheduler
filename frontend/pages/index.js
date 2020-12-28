@@ -10,6 +10,7 @@ import ModalFails from 'components/modalFails';
 import { Creators as UserDetailsCreators } from 'appStore/ducks/user/details';
 import { Creators as ServicesListCreators } from 'appStore/ducks/services/list';
 import { Creators as SchedulesDetailsCreators } from 'appStore/ducks/schedules/details';
+import { Creators as SchedulesCreateCreators } from 'appStore/ducks/schedules/create';
 import moment from 'moment';
 import { Creators as SchedulesListDetailsCreators } from 'appStore/ducks/schedules/list';
 
@@ -73,7 +74,10 @@ export default function Index() {
   const handleOpenModal = () => {
     setOpenModalFail(true);
   };
+
+  const [selectedTime, setSelectedTime] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
+
   const getSchedulesDay = () => {
     dispatch(
       SchedulesListDetailsCreators.getRequest({
@@ -113,6 +117,14 @@ export default function Index() {
     dispatch(ServicesListCreators.getRequest());
   }, []);
 
+  const onSchedulerSubmit = data => {
+    dispatch(SchedulesCreateCreators.getRequest({ 
+      data: { ...data.filter(item => item.checked) },
+      selectedDate: moment(selectedDate).format('YYYY-MM-DD'), 
+      selectedTime 
+    }));
+  };
+
   return (
     <>
       <Layout maxWidth={false}>
@@ -132,6 +144,9 @@ export default function Index() {
               getSchedulesDay={getSchedulesDay}
               getSchedulesDetails={getSchedulesDetails}
               selectedDate={selectedDate && moment(selectedDate).format('DD/MM/YYYY')}
+              selectedTime={selectedTime}
+              setSelectedTime={setSelectedTime}
+              onSchedulerSubmit={onSchedulerSubmit}
             />
           </div>
         </Container>

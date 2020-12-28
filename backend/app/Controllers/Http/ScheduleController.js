@@ -38,21 +38,24 @@ class ScheduleController {
    * @param {Response} ctx.response
    */
   async store({ auth, request, response }) {
-    const { date, schedule, service_id, client_id } = request.all();
-    const scheduleX = new Schedule();
-    scheduleX.date = date;
-    scheduleX.schedule = schedule;
-    scheduleX.service_id = service_id;
-    scheduleX.client_id = auth.user.id;
+    const { date, schedule, service_id, client_id, total_time, total_value } = request.all();
+    const scheduleObj = new Schedule();
+    scheduleObj.date = date;
+    scheduleObj.schedule = schedule;
+    scheduleObj.service_id = JSON.stringify(service_id);
+    
+    scheduleObj.total_time = total_time;
+    scheduleObj.total_value = total_value;
+    scheduleObj.client_id = auth.user.id;
 
     try {
-      await scheduleX.save()
+      await scheduleObj.save()
       return formatResponse({
         response,
         status: 200,
         msg: 'Cadastro realizado com sucesso.',
         total: 1,
-        data: scheduleX,
+        data: scheduleObj,
       })
     } catch (err) {
       return formatResponse({
@@ -94,24 +97,27 @@ class ScheduleController {
    * @param {Response} ctx.response
    */
   async update({ auth, params, request, response }) {
-    const { date, schedule, service_id, client_id } = request.all();
-    const scheduleX = new Schedule();
-    scheduleX.date = date;
-    scheduleX.schedule = schedule;
-    scheduleX.service_id = service_id;
-    scheduleX.client_id = auth.user.id;
+    const { date, schedule, service_id, client_id, total_time, total_value } = request.all();
+    const scheduleObj = new Schedule();
+    scheduleObj.date = date;
+    scheduleObj.schedule = schedule;
+    scheduleObj.service_id = JSON.stringify(service_id);
+    
+    scheduleObj.total_time = total_time;
+    scheduleObj.total_value = total_value;
+    scheduleObj.client_id = auth.user.id;
 
     try {
       await Schedule.query()
         .where('id', params.id)
-        .update(scheduleX);
+        .update(scheduleObj);
 
       return formatResponse({
         response,
         status: 200,
         msg: 'Cadastro atualizado com sucesso.',
         total: 1,
-        data: scheduleX,
+        data: scheduleObj,
       })
     } catch (err) {
       return formatResponse({

@@ -36,6 +36,6 @@ Factory.blueprint('App/Models/Service', async (faker) => {
     name: faker.name(),
     price: 15.0,
     time: 30.0,
-    company_id: 33,
+    company_id: 1,
   }
 })

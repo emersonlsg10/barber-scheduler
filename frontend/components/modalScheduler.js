@@ -55,6 +55,8 @@ function ModalScheduler({
   selectedTime,
   limitTimeService,
   selectedDate,
+  onSchedulerSubmit,
+  loadingScheduleCreate,
 }) {
   const classes = useStyles();
 
@@ -155,10 +157,15 @@ function ModalScheduler({
         </div>
         <Button
           type="submit"
+          onClick={() => countTime > 0 && onSchedulerSubmit(state)}
           disabled={!filterLimitTime({ time: countTime })}
           className={classes.buttonLogin}
           variant="contained">
-          {false ? <CircularProgress size={22} color="primary" /> : 'Agendar'}
+          {loadingScheduleCreate ? (
+            <CircularProgress size={22} color="primary" />
+          ) : (
+            'Agendar'
+          )}
         </Button>
       </div>
     </>
