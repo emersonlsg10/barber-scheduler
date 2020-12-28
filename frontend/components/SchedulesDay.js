@@ -79,6 +79,7 @@ export default function SchedulesDay({
 
   const {
     loading: loadingScheduleCreate,
+    data: dataScheduleCreate,
   } = useSelector(state => state.schedules.create);
 
   const [openModal, setOpenModal] = useState(false);
@@ -134,6 +135,15 @@ export default function SchedulesDay({
       getSchedulesDay();
     }
   }, [dataScheduleDetails])
+
+  useEffect(() => {
+    if(!loadingScheduleCreate && !!dataScheduleCreate){
+      getSchedulesDay();
+      setTimeout(() => {
+        handleCloseModal();
+      }, 1500)
+    }
+  }, [dataScheduleCreate])
 
   return (
     <div className={classes.root}>

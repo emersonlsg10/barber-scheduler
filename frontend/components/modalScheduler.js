@@ -77,6 +77,7 @@ function ModalScheduler({
       checked: event.target.checked,
       time: rowData.time,
       price: rowData.price,
+      name: rowData.name,
       id: rowData.id,
     };
   };
@@ -93,6 +94,7 @@ function ModalScheduler({
           checked: false,
           time: item.time,
           price: item.price,
+          name: item.name,
           id: item.id,
         })),
       ]);

@@ -119,9 +119,9 @@ export default function Index() {
 
   const onSchedulerSubmit = data => {
     dispatch(SchedulesCreateCreators.getRequest({ 
-      data: { ...data.filter(item => item.checked) },
-      selectedDate: moment(selectedDate).format('YYYY-MM-DD'), 
-      selectedTime 
+      service_id: [...data.filter(item => item.checked)],
+      date: moment(selectedDate).format('YYYY-MM-DD'), 
+      schedule: selectedTime,
     }));
   };
 

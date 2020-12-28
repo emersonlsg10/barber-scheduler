@@ -53,7 +53,7 @@ class ScheduleController {
       return formatResponse({
         response,
         status: 200,
-        msg: 'Cadastro realizado com sucesso.',
+        msg: 'Reserva feita com sucesso!',
         total: 1,
         data: scheduleObj,
       })
