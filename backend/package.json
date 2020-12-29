@@ -6,6 +6,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
+    "dev": "adonis serve --dev",
+    "xammp": "sudo /opt/lampp/lampp start",
     "test": "node ace test"
   },
   "keywords": [
@@ -24,6 +26,7 @@
     "@adonisjs/framework": "^5.0.9",
     "@adonisjs/ignitor": "^2.0.8",
     "@adonisjs/lucid": "^6.2.1",
+    "moment": "^2.29.1",
     "mysql": "^2.18.1"
   },
   "devDependencies": {},
