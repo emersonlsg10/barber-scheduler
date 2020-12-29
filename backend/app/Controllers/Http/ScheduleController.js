@@ -19,7 +19,7 @@ class ScheduleController {
    */
   async index({ request, response }) {
     const { date, page, per_page } = request.all();
-    const schedules = await Schedule.query().where('date', date).paginate(page, per_page);
+    const schedules = await Schedule.query().where('date', date).orderBy('schedule', 'asc').paginate(page, per_page);
     return formatResponse({
       response,
       status: 200,

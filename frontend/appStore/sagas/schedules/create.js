@@ -19,6 +19,7 @@ function* getSchedulesCreate({ payload }) {
     const { total_value } = service_id.reduce((a, b) => ({
       total_value: a.price + b.price,
     }));
+
     const request = call(api.post, `api/v1/schedules`, {
       date,
       schedule,

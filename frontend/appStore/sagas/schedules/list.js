@@ -1,4 +1,4 @@
-import { call, put, all, takeLatest, delay } from 'redux-saga/effects';
+import { call, put, all, takeLatest } from 'redux-saga/effects';
 import {
   Creators as SchedulesListDetailsCreators,
   Types as SchedulesListTypes,
@@ -14,7 +14,6 @@ function* getSchedulesList({ payload }) {
     const request = call(api.get, `api/v1/schedules?date=${date}`);
     const response = yield callApi(request);
     yield interceptResponse(response);
-    yield delay(1000);
     yield put(SchedulesListDetailsCreators.getSuccess(response.data));
   } catch (err) {
     yield interceptError(SchedulesListDetailsCreators.getFailure, err);

@@ -55,7 +55,7 @@ const configs = {
     '18',
     '19',
   ],
-  perHour: ['00', '30'],
+  perHour: ['00','30'],
   razao: 30,
 };
 
@@ -69,7 +69,8 @@ export default function SchedulesDay({
   selectedDate,
   selectedTime,
   setSelectedTime,
-  onSchedulerSubmit
+  onSchedulerSubmit,
+  dataUser
 }) {
   const classes = useStyles();
   const {
@@ -89,7 +90,13 @@ export default function SchedulesDay({
     return dataSchedules?.find(item => item.schedule === hour);
   }
 
-  const handleOpenModal = (hour, min) => {
+  const handleOpenModal = (hour, min, rowData) => {
+
+    if (rowData) {
+      const Teste = rowData[0]?.service_id;
+      console.log(JSON.parse(Teste));
+    }
+
     const formatedHour = `${hour}:${min}:00`;
     setSelectedTime(formatedHour);
     getSchedulesDetails(formatedHour);
@@ -121,6 +128,22 @@ export default function SchedulesDay({
     console.log(count);
   };
 
+  const countLimitBefore = schedule => {
+    let scanTime = 60; // minutes
+    let tempRazao = configs.razao;
+    let tempHour = `${schedule}`;
+
+    for (let i = 1; i <= scanTime / tempRazao; i++) {   
+      tempHour = moment(tempHour, 'HH:mm:ss').subtract(tempRazao, 'minutes').format('HH:mm:ss');
+      
+      const verifyExists = verifyHourSchedule(`${tempHour}`);
+      if (verifyExists && verifyExists?.total_time > tempRazao * i) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   useEffect(() => {
     setOpenModal(false);
   }, [])
@@ -137,7 +160,7 @@ export default function SchedulesDay({
   }, [dataScheduleDetails])
 
   useEffect(() => {
-    if(!loadingScheduleCreate && !!dataScheduleCreate){
+    if (!loadingScheduleCreate && !!dataScheduleCreate) {
       getSchedulesDay();
       setTimeout(() => {
         handleCloseModal();
@@ -145,34 +168,37 @@ export default function SchedulesDay({
     }
   }, [dataScheduleCreate])
 
+
+  const [delayLoading, setDelayLoading] = useState(false);
+  useEffect(() => {
+    if(loadingSchedules) {
+      setDelayLoading(true);
+      setTimeout(() => { setDelayLoading(false) }, 1000);
+    }
+  }, [loadingSchedules]);
+
   return (
     <div className={classes.root}>
-      <Backdrop className={classes.backdrop} open={loadingScheduleDetails || loadingSchedules}>
+      <Backdrop className={classes.backdrop} open={loadingScheduleDetails || delayLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
       <List component="nav" className={classes.list} aria-label="main mailbox folders">
         {configs.hoursPerDays.map((hour, index) => (
           <>
-            {configs.perHour.map(min => (
+            {configs.perHour.map((min) => (
               <>
-                {verifyHourSchedule(`${hour}:${min}:00`) ? (
-                  <ListItem key={index} button className={classes.listItem}>
-                    <ListItemIcon>
-                      <AccessTimeIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={`${hour}:${min}`} />
-                    <span style={{ fontStyle: 'italic', fontSize: 13 }}>
-                      Reservado por outra pessoa
-                    </span>
-                  </ListItem>) : (
-                    <ListItem key={index} onClick={() => handleOpenModal(hour, min)} button className={classes.listItem}>
-                      <ListItemIcon>
-                        <AccessTimeIcon />
-                      </ListItemIcon>
-                      <ListItemText primary={`${hour}:${min}`} />
-                      {(loadingScheduleDetails || loadingSchedules) && selectedTime === `${hour}:${min}:00` ? <CircularProgress color="primary" size={16} /> : <AddCircleOutlineIcon />}
-                    </ListItem>)}
-                <Divider />
+                <ItemList key={index}
+                  index={index}
+                  hour={hour} 
+                  min={min} 
+                  verifyHourSchedule={verifyHourSchedule}
+                  dataUser={dataUser}
+                  handleOpenModal={handleOpenModal}
+                  selectedTim={selectedTime}
+                  loadingSchedules={loadingSchedules}
+                  loadingScheduleDetails={loadingScheduleDetails}
+                  countLimitBefore={countLimitBefore}
+                />
               </>
             ))}
           </>
@@ -196,3 +222,42 @@ export default function SchedulesDay({
     </div>
   );
 }
+
+const ItemList = ({
+  hour, 
+  min, 
+  verifyHourSchedule, 
+  dataUser, 
+  handleOpenModal,
+  selectedTime,
+  loadingSchedules,
+  loadingScheduleDetails,
+  countLimitBefore,
+}) => {
+  const classes = useStyles();
+  const VerifySchedule = verifyHourSchedule(`${hour}:${min}:00`);
+  const VerifyBefore = countLimitBefore(`${hour}:${min}:00`);
+
+  return (
+    <>
+      { VerifySchedule || VerifyBefore ? (
+        <ListItem onClick={() => console.log(VerifySchedule)} button className={classes.listItem}>
+          <ListItemIcon>
+            <AccessTimeIcon />
+          </ListItemIcon>
+          <ListItemText primary={`${hour}:${min}`} />
+          <span style={{ fontStyle: 'italic', fontSize: 13 }}>
+            {dataUser && VerifySchedule && dataUser?.id === VerifySchedule.client_id ? 'Reservado por você' : 'Reservado por outra pessoa'}
+          </span>
+        </ListItem>) : (
+          <ListItem onClick={() => handleOpenModal(hour, min)} button className={classes.listItem}>
+            <ListItemIcon>
+              <AccessTimeIcon />
+            </ListItemIcon>
+            <ListItemText primary={`${hour}:${min}`} />
+            {(loadingScheduleDetails || loadingSchedules) && selectedTime === `${hour}:${min}:00` ? <CircularProgress color="primary" size={16} /> : <AddCircleOutlineIcon />}
+          </ListItem>)}
+      <Divider />
+    </>
+  );
+};

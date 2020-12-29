@@ -147,6 +147,7 @@ export default function Index() {
               selectedTime={selectedTime}
               setSelectedTime={setSelectedTime}
               onSchedulerSubmit={onSchedulerSubmit}
+              dataUser={dataUser}
             />
           </div>
         </Container>

@@ -17,7 +17,6 @@ function* getSchedulesList({ payload }) {
     );
     const response = yield callApi(request);
     yield interceptResponse(response);
-    yield delay(1000);
     yield put(SchedulesDetailsCreators.getSuccess(response.data));
   } catch (err) {
     yield interceptError(SchedulesDetailsCreators.getFailure, err);
