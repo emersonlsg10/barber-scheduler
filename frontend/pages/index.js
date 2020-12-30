@@ -112,9 +112,9 @@ export default function Index() {
   useEffect(() => {
     if (!loadingUser) {
       dispatch(UserDetailsCreators.getRequest())
+      getSchedulesDay();
+      dispatch(ServicesListCreators.getRequest());
     }
-    getSchedulesDay();
-    dispatch(ServicesListCreators.getRequest());
   }, []);
 
   const onSchedulerSubmit = data => {
@@ -172,8 +172,4 @@ const Greetings = ({ name }) => {
   return (
     <div className={classes.greetings}>Olá <strong>{name}</strong>, seja bem vindo!</div>
   )
-};
-
-Index.getInitialProps = async ({ store }) => {
-  store.dispatch(UserDetailsCreators.getRequest())
 };

@@ -141,7 +141,7 @@ class ServiceController {
       return formatResponse({
         response,
         status: 201,
-        msg: 'Cadastro deletado com sucesso.',
+        msg: 'Serviço deletado com sucesso.',
         total: 1,
         data: service,
       })

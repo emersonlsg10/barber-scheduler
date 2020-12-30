@@ -23,7 +23,7 @@ export const appPages = [
   },
   {
     id: 'services',
-    name: 'Cadastrar Serviços',
+    name: 'Serviços',
     path: '/services',
     requiredAuth: true,
   },
@@ -56,7 +56,7 @@ export default function SideDrawer() {
   const dispatch = useDispatch();
 
   const { data: userData } = useSelector(state => state.user.details);
-  console.log(userData);
+
   const [state, setState] = React.useState({
     left: false,
   });

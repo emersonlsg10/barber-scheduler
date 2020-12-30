@@ -6,6 +6,8 @@ import schedulesList from './schedules/list';
 import schedulesDetails from './schedules/details';
 import schedulesCreate from './schedules/create';
 import servicesList from './services/list';
+import servicesDelete from './services/delete';
+import servicesCreate from './services/create';
 import login from './login';
 import register from './register';
 import { reducer as notifications } from 'react-notification-system-redux';
@@ -23,6 +25,8 @@ export default combineReducers({
   }),
   services: combineReducers({
     list: servicesList,
+    delete: servicesDelete,
+    create: servicesCreate,
   }),
   login,
   notifications,
