@@ -2,6 +2,7 @@ export const Types = {
   GET_REQUEST: 'user-details/GET_REQUEST',
   GET_SUCCESS: 'user-details/GET_SUCCESS',
   GET_FAILURE: 'user-details/GET_FAILURE',
+  GET_RESET: 'user-details/GET_RESET',
 };
 
 const initialState = {
@@ -23,6 +24,8 @@ export default function (state = initialState, action) {
       };
     case Types.GET_FAILURE:
       return { ...state, loading: false, error: action.payload };
+    case Types.GET_RESET:
+      return initialState;
     default:
       return state;
   }
@@ -40,5 +43,8 @@ export const Creators = {
   getFailure: error => ({
     type: Types.GET_FAILURE,
     payload: error,
+  }),
+  getReset: () => ({
+    type: Types.GET_RESET,
   }),
 };

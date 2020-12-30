@@ -29,15 +29,14 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function LoginScreen({ query }) {
+function LoginScreen() {
   const dispatch = useDispatch();
   const classes = useStyles();
 
   const { loading } = useSelector(state => state.login);
 
   const onSubmit = ({ email, password }) => {
-    const route = query.route ? query.route : '';
-    dispatch(LoginCreators.getLoginRequest({ email, password, route }));
+    dispatch(LoginCreators.getLoginRequest({ email, password }));
   };
 
   return (
@@ -71,9 +70,5 @@ function LoginScreen({ query }) {
     </>
   );
 }
-
-LoginScreen.getInitialProps = ({ query }) => {
-  return { query };
-};
 
 export default LoginScreen;

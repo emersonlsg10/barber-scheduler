@@ -2,8 +2,6 @@ export const Types = {
   GET_REQUEST: 'login/GET_REQUEST',
   GET_SUCCESS: 'login/GET_SUCCESS',
   GET_FAILURE: 'login/GET_FAILURE',
-
-  GET_LOGOUT_REQUEST: 'login/GET_LOGOUT_REQUEST',
 };
 
 const initialState = {
@@ -28,9 +26,9 @@ export default function (state = initialState, action) {
 }
 
 export const Creators = {
-  getLoginRequest: ({ email, password, route }) => ({
+  getLoginRequest: ({ email, password }) => ({
     type: Types.GET_REQUEST,
-    payload: { email, password, route },
+    payload: { email, password },
   }),
   getLoginSuccess: () => ({
     type: Types.GET_SUCCESS,

@@ -15,6 +15,7 @@ import { setCookie } from 'utils/cookie';
 
 function* getLogin({ payload }) {
   try {
+    console.log(email, password);
     const { email, password, route } = payload;
     yield call(api.setHeader, 'Authorization', '');
     const response = yield call(api.post, 'api/v1/login', {
@@ -22,13 +23,14 @@ function* getLogin({ payload }) {
       password,
       grant_type: 'password',
     });
+    console.log(response, 'response');
     yield interceptResponse(response);
     yield call(setCookie, 'token', response.data.token);
     yield call(setCookie, 'refreshToken', response.data.refreshToken);
     yield put(AuthCreators.getSuccess(response.data));
-    yield put(UserCreators.getRequest());
     yield delay(1000);
     yield put(LoginCreators.getLoginSuccess());
+    yield put(UserCreators.getRequest());
     if (!route) {
       yield call(Router.replace, { pathname: '/' });
     } else {

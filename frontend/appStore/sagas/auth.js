@@ -10,9 +10,9 @@ import {
 import Router from 'next/router';
 
 // import { Creators as ProfileCreators } from '../ducks/perfil';
-import { removeCookie, getCookie, setCookie } from 'utils/cookie';
+import { removeCookie, setCookie } from 'utils/cookie';
 import { Creators as AuthCreators, Types as AuthTypes } from '../ducks/auth';
-import { Creators as UserCreators } from '../ducks/schedules/list';
+import { Creators as UserCreators } from '../ducks/user/details';
 import api from 'services/api';
 import interceptResponse from 'services/interceptResponse';
 
@@ -21,7 +21,7 @@ function* getLogout() {
   yield call(removeCookie, 'refreshToken');
   yield call(Router.push, { pathname: '/login' });
   yield put(AuthCreators.getLogoutSuccess());
-  yield put(UserCreators.resetUser());
+  yield put(UserCreators.getReset());
 }
 
 export function* callApi(apiCall, trowError = true) {
