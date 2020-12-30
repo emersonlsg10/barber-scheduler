@@ -11,7 +11,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
@@ -55,7 +54,7 @@ const configs = {
     '18',
     '19',
   ],
-  perHour: ['00','30'],
+  perHour: ['00', '30'],
   razao: 30,
 };
 
@@ -133,15 +132,15 @@ export default function SchedulesDay({
     let tempRazao = configs.razao;
     let tempHour = `${schedule}`;
 
-    for (let i = 1; i <= scanTime / tempRazao; i++) {   
+    for (let i = 1; i <= scanTime / tempRazao; i++) {
       tempHour = moment(tempHour, 'HH:mm:ss').subtract(tempRazao, 'minutes').format('HH:mm:ss');
-      
+
       const verifyExists = verifyHourSchedule(`${tempHour}`);
       if (verifyExists && verifyExists?.total_time > tempRazao * i) {
-        return true;
+        return verifyExists;
       }
     }
-    return false;
+    return null;
   };
 
   useEffect(() => {
@@ -153,25 +152,26 @@ export default function SchedulesDay({
       if (!loadingSchedules && selectedTime && !!dataSchedules && !verifyHourSchedule(selectedTime)) {
         setOpenModal(true);
         countLimit(selectedTime);
+      } else {
+        getSchedulesDay();
       }
     } else {
       getSchedulesDay();
     }
-  }, [dataScheduleDetails])
+  }, [dataScheduleDetails]);
 
   useEffect(() => {
     if (!loadingScheduleCreate && !!dataScheduleCreate) {
       getSchedulesDay();
       setTimeout(() => {
         handleCloseModal();
-      }, 1500)
+      }, 1500);
     }
-  }, [dataScheduleCreate])
-
+  }, [dataScheduleCreate]);
 
   const [delayLoading, setDelayLoading] = useState(false);
   useEffect(() => {
-    if(loadingSchedules) {
+    if (loadingSchedules) {
       setDelayLoading(true);
       setTimeout(() => { setDelayLoading(false) }, 1000);
     }
@@ -189,8 +189,8 @@ export default function SchedulesDay({
               <>
                 <ItemList key={index}
                   index={index}
-                  hour={hour} 
-                  min={min} 
+                  hour={hour}
+                  min={min}
                   verifyHourSchedule={verifyHourSchedule}
                   dataUser={dataUser}
                   handleOpenModal={handleOpenModal}
@@ -224,10 +224,10 @@ export default function SchedulesDay({
 }
 
 const ItemList = ({
-  hour, 
-  min, 
-  verifyHourSchedule, 
-  dataUser, 
+  hour,
+  min,
+  verifyHourSchedule,
+  dataUser,
   handleOpenModal,
   selectedTime,
   loadingSchedules,
@@ -247,17 +247,17 @@ const ItemList = ({
           </ListItemIcon>
           <ListItemText primary={`${hour}:${min}`} />
           <span style={{ fontStyle: 'italic', fontSize: 13 }}>
-            {dataUser && VerifySchedule && dataUser?.id === VerifySchedule.client_id ? 'Reservado por você' : 'Reservado por outra pessoa'}
+            {(VerifyBefore && VerifyBefore.client_id === dataUser?.id) || (dataUser && VerifySchedule && dataUser?.id === VerifySchedule.client_id) ? 'Reservado por você' : 'Reservado por outra pessoa'}
           </span>
         </ListItem>) : (
-          <ListItem onClick={() => handleOpenModal(hour, min)} button className={classes.listItem}>
+          <ListItem style={{ marginLeft: 5 }} onClick={() => handleOpenModal(hour, min)} button className={classes.listItem}>
             <ListItemIcon>
-              <AccessTimeIcon />
+              <AccessTimeIcon/>
             </ListItemIcon>
             <ListItemText primary={`${hour}:${min}`} />
             {(loadingScheduleDetails || loadingSchedules) && selectedTime === `${hour}:${min}:00` ? <CircularProgress color="primary" size={16} /> : <AddCircleOutlineIcon />}
           </ListItem>)}
-      <Divider />
+      {/* <Divider style={{ borderStyle: 'solid', borderColor: '#808080', borderWidth: 0.5 }} /> */}
     </>
   );
 };

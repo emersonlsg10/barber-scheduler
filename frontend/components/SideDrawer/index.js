@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -20,6 +20,12 @@ export const appPages = [
     id: 'home',
     name: 'Início',
     path: '/',
+  },
+  {
+    id: 'services',
+    name: 'Cadastrar Serviços',
+    path: '/services',
+    requiredAuth: true,
   },
   {
     id: 'configs',
@@ -48,6 +54,9 @@ const useStyles = makeStyles({
 export default function SideDrawer() {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const { data: userData } = useSelector(state => state.user.details);
+  console.log(userData);
   const [state, setState] = React.useState({
     left: false,
   });
@@ -73,6 +82,13 @@ export default function SideDrawer() {
     dispatch(AuthCreators.getLogoutRequest());
   };
 
+  const menuFilter = menu => {
+    if (!menu.requiredAuth) {
+      return true;
+    }
+    return userData && userData.group === '1' && menu.requiredAuth;
+  };
+
   const sideList = side => (
     <div
       className={classes.list}
@@ -80,7 +96,7 @@ export default function SideDrawer() {
       onClick={toggleDrawer(side, false)}
       onKeyDown={toggleDrawer(side, false)}>
       <List className={classes.listMenus}>
-        {appPages.map(menu => (
+        {appPages.filter(menuFilter).map(menu => (
           <React.Fragment key={menu.id}>
             <Link href={menu.path}>
               <ListItem button>

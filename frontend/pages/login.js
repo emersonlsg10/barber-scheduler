@@ -68,17 +68,6 @@ function LoginScreen({ query }) {
           </Card>
         </Box>
       </main>
-      <style jsx>
-        {`
-          .formLogin {
-            height: 100vh;
-            background-image: url('/img/background_login.jpg');
-            background-repeat: no-repeat, repeat;
-            background-position: center; /* Center the image */
-            background-size: cover; /* Resize the background image to cover the entire container */
-          }
-        `}
-      </style>
     </>
   );
 }

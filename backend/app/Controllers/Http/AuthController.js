@@ -3,9 +3,22 @@ const User = use('App/Models/User')
 const formatResponse = require('../../appUtils/formatResponse');
 
 class AuthController {
-    async login({ auth, request }) {
-        const { uid, password } = request.all()
-        return await auth.withRefreshToken().attempt(uid, password)
+    async login({ auth, request, response }) {
+        const { uid, password } = request.all();
+
+        try {
+            const responseAuth = await auth.withRefreshToken().attempt(uid, password);
+            return responseAuth;
+        } catch (err) {
+            return formatResponse({
+                response,
+                status: 409,
+                msg: 'Email ou senha inválida! Tente novamente.',
+                total: 1,
+                data: null,
+            })
+        }
+
     }
 
     async refresh({ auth, request }) {
