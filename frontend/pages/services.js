@@ -1,12 +1,14 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { Creators as ServicesDeleteCreators } from 'appStore/ducks/services/delete';
+import ServiceForm from 'components/dashboardComponents/serviceForm';
 import Layout from 'components/layout';
 import ServiceTable from 'components/ServicesTable';
 import { Container, makeStyles, Modal } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import ModalFails from 'components/modalFails';
+import { Creators as ServicesDeleteCreators } from 'appStore/ducks/services/delete';
+import { Creators as ServicesCreateCreators } from 'appStore/ducks/services/create';
 import { Creators as ServicesListCreators } from 'appStore/ducks/services/list';
 import moment from 'moment';
 
@@ -28,6 +30,10 @@ export default function Index() {
     loading: loadingServices,
   } = useSelector(state => state.services.list);
 
+  const {
+    loading: loadingServicesCreate,
+  } = useSelector(state => state.services.create);
+
   useEffect(() => {
     dispatch(ServicesListCreators.getRequest());
   }, []);
@@ -36,16 +42,21 @@ export default function Index() {
     dispatch(ServicesDeleteCreators.getRequest({ id }));
   };
 
+  const onSubmit = formData => {
+    dispatch(ServicesCreateCreators.getRequest(formData));
+  };
+
   return (
     <>
       <Layout maxWidth={false}>
         <Container maxWidth={'lg'}>
           <div className={classes.title}>Cadadastro de <strong>Serviços</strong></div>
-          <ServiceTable 
-            dataServices={dataServices?.data} 
-            loadingServices={loadingServices}
-            onDeleteService={onDeleteService}
-          />
+            <ServiceForm onSubmit={onSubmit} loading={loadingServicesCreate} />
+            <ServiceTable
+              dataServices={dataServices?.data}
+              loadingServices={loadingServices}
+              onDeleteService={onDeleteService}
+            />
         </Container>
       </Layout>
     </>

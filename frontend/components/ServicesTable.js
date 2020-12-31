@@ -60,7 +60,7 @@ export default function ServiceTable({
 
   return (
     <>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} style={{ marginBottom: 20 }}>
         <Backdrop className={classes.backdrop} open={delayLoading}>
           <CircularProgress color="inherit" />
         </Backdrop>
@@ -93,6 +93,7 @@ export default function ServiceTable({
                   </TableCell>
                   <TableCell align="left">
                     <IconButton
+                      style={{ marginLeft: -15 }}
                       onClick={() => onDeleteService(row.id)}
                       aria-label="delete"
                       color="primary">

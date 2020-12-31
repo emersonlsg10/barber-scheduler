@@ -50,7 +50,7 @@ class ServiceController {
       return formatResponse({
         response,
         status: 200,
-        msg: 'Cadastro realizado com sucesso.',
+        msg: 'Serviço cadastrado com sucesso!',
         total: 1,
         data: service,
       })

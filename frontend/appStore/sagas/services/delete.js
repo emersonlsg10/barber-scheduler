@@ -21,7 +21,7 @@ function* getServicesDelete({ payload }) {
     );
     yield put(
       ServicesListCreators.getSuccess({
-        data: [...servicesList?.data.filter(item => item.id !== id)],
+        data: { data: [...servicesList?.data.filter(item => item.id !== id)] },
         total: total - 1,
       })
     );
