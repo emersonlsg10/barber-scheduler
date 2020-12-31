@@ -23,17 +23,12 @@ Route.get('/', () => {
 Route.group(() => {
   Route.post('login', 'AuthController.login')
   Route.post('oauth/refresh', 'AuthController.refresh')
-
-  Route.post('register', 'AuthController.store')
-
+  Route.post('register', 'ClientController.store')
 }).prefix('api/v1').middleware(['guest'])
 
 Route.group(() => {
-
-  Route.get('user', 'AuthController.show');
-
+  Route.get('user', 'ClientController.show');
   Route.resource('users', 'UserController');
   Route.resource('services', 'ServiceController');
   Route.resource('schedules', 'ScheduleController');
-
 }).prefix('api/v1').middleware(['auth'])
