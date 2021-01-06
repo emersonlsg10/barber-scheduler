@@ -16,11 +16,15 @@ const theme = createMuiTheme({
     error: {
       main: red.A400,
     },
+    gray: {
+      main: red.A400,
+    },
     background: {
       primary: '#252525',
       default: '#fff',
       gray: '#cecece',
       lightGray: '#fefefe',
+      darkGray: 'rgb(52,56,59)',
     },
   },
 });

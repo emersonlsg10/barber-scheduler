@@ -170,6 +170,11 @@ function ModalScheduler({
           )}
         </Button>
       </div>
+      <style global jsx>{`
+        .MuiFormControlLabel-label {
+          color: white !important;
+        }
+      `}</style>
     </>
   );
 }

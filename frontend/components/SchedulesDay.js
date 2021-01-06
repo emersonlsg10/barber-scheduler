@@ -16,7 +16,6 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    backgroundColor: theme.palette.background.gray,
     width: '100%',
   },
   list: {
@@ -25,8 +24,9 @@ const useStyles = makeStyles(theme => ({
   },
   listItem: {
     height: 35,
+    color: '#fff',
     '&:nth-of-type(odd)': {
-      backgroundColor: '#cecece',
+      backgroundColor: theme.palette.background.darkGray,
     },
   },
   button: {
@@ -252,12 +252,16 @@ const ItemList = ({
         </ListItem>) : (
           <ListItem style={{ marginLeft: 5 }} onClick={() => handleOpenModal(hour, min)} button className={classes.listItem}>
             <ListItemIcon>
-              <AccessTimeIcon/>
+              <AccessTimeIcon style={{ color: 'white' }}/>
             </ListItemIcon>
             <ListItemText primary={`${hour}:${min}`} />
             {(loadingScheduleDetails || loadingSchedules) && selectedTime === `${hour}:${min}:00` ? <CircularProgress color="primary" size={16} /> : <AddCircleOutlineIcon />}
           </ListItem>)}
-      {/* <Divider style={{ borderStyle: 'solid', borderColor: '#808080', borderWidth: 0.5 }} /> */}
+          <style global jsx>{`
+            .MuiListItemText-primary {
+              color: white !important;
+            }
+          `}</style>
     </>
   );
 };
