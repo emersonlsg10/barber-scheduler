@@ -32,13 +32,22 @@ export default function MaterialUIPickers({ selectedDate, setSelectedDate }) {
         </Grid>
       </MuiPickersUtilsProvider>
       <style global jsx>{`
+        #date-picker-inline {
+          color: #fff !important;
+        }
         .MuiTextField-root {
           width: 100% !important;
         }
         .MuiFormLabel-root {
-          font-size: 22px;
+          font-size: 23px;
           font-weight: bolder;
           color: #eb961f !important;
+        }
+        .MuiIconButton-label {
+          color: #eb961f !important;
+        }
+        .MuiTypography-root {
+          color: black !important;
         }
         .MuiInputBase-root {
           margin-top: 25px !important;

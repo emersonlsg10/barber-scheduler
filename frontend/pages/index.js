@@ -23,6 +23,7 @@ const useStyles = makeStyles(theme => ({
   greetings: {
     fontSize: 20,
     margin: '15px 0 0 0px',
+    color: 'white',
   },
   modal: {
     color: '#fff',
