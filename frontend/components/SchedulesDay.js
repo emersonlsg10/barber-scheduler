@@ -243,19 +243,19 @@ const ItemList = ({
       { VerifySchedule || VerifyBefore ? (
         <ListItem onClick={() => console.log(VerifySchedule)} button className={classes.listItem}>
           <ListItemIcon>
-            <AccessTimeIcon />
+            <AccessTimeIcon style={{ color: 'white' }} />
           </ListItemIcon>
           <ListItemText primary={`${hour}:${min}`} />
           <span style={{ fontStyle: 'italic', fontSize: 13 }}>
             {(VerifyBefore && VerifyBefore.client_id === dataUser?.id) || (dataUser && VerifySchedule && dataUser?.id === VerifySchedule.client_id) ? 'Reservado por você' : 'Reservado por outra pessoa'}
           </span>
         </ListItem>) : (
-          <ListItem style={{ marginLeft: 5 }} onClick={() => handleOpenModal(hour, min)} button className={classes.listItem}>
+          <ListItem onClick={() => handleOpenModal(hour, min)} button className={classes.listItem}>
             <ListItemIcon>
               <AccessTimeIcon style={{ color: 'white' }}/>
             </ListItemIcon>
             <ListItemText primary={`${hour}:${min}`} />
-            {(loadingScheduleDetails || loadingSchedules) && selectedTime === `${hour}:${min}:00` ? <CircularProgress color="primary" size={16} /> : <AddCircleOutlineIcon />}
+            {(loadingScheduleDetails || loadingSchedules) && selectedTime === `${hour}:${min}:00` ? <CircularProgress color="primary" size={16} /> : <AddCircleOutlineIcon style={{ marginLeft: 10 }} />}
           </ListItem>)}
           <style global jsx>{`
             .MuiListItemText-primary {

@@ -26,7 +26,8 @@
     "@adonisjs/framework": "^5.0.9",
     "@adonisjs/ignitor": "^2.0.8",
     "@adonisjs/lucid": "^6.2.1",
-    "moment": "^2.29.1"
+    "moment": "^2.29.1",
+    "mysql": "^2.18.1"
   },
   "devDependencies": {},
   "autoload": {

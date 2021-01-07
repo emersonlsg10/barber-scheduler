@@ -7,6 +7,7 @@ import schedulesCreate from './schedules/create';
 import servicesList from './services/list';
 import servicesDelete from './services/delete';
 import servicesCreate from './services/create';
+import companyDetails from './company/details';
 import login from './login';
 import register from './register';
 
@@ -22,6 +23,7 @@ function* rootSaga() {
     fork(servicesList),
     fork(servicesDelete),
     fork(servicesCreate),
+    fork(companyDetails),
   ]);
 }
 

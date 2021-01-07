@@ -8,6 +8,7 @@ import schedulesCreate from './schedules/create';
 import servicesList from './services/list';
 import servicesDelete from './services/delete';
 import servicesCreate from './services/create';
+import companyDetails from './company/details';
 import login from './login';
 import register from './register';
 import { reducer as notifications } from 'react-notification-system-redux';
@@ -17,6 +18,9 @@ export default combineReducers({
   auth,
   user: combineReducers({
     details: userDetails,
+  }),
+  company: combineReducers({
+    details: companyDetails,
   }),
   schedules: combineReducers({
     list: schedulesList,
