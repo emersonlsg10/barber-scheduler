@@ -1,4 +1,4 @@
-import { call, put, all, takeLatest, delay } from 'redux-saga/effects';
+import { call, put, all, takeLatest, delay, select } from 'redux-saga/effects';
 import Router from 'next/router';
 // import { Creators as ProfileCreators } from 'appStore/ducks/perfil';
 import { Creators as AuthCreators } from 'appStore/ducks/auth';
@@ -14,6 +14,8 @@ import { setCookie } from 'utils/cookie';
 
 function* getLogin({ payload }) {
   try {
+    const { redirect } = yield select(state => state.login);
+    console.log(redirect)
     const { email, password, route } = payload;
     yield call(api.setHeader, 'Authorization', '');
     const response = yield call(api.post, 'api/v1/login', {
@@ -28,7 +30,7 @@ function* getLogin({ payload }) {
     yield delay(1000);
     yield put(LoginCreators.getLoginSuccess());
     if (!route) {
-      yield call(Router.replace, { pathname: '/' });
+      yield call(Router.replace, { pathname: `/${redirect}` });
     } else {
       yield delay(1000);
       yield window.location.assign(route);
@@ -39,6 +41,18 @@ function* getLogin({ payload }) {
   }
 }
 
+function* getLoginRedirect() {
+  try {
+    yield call(Router.replace, { pathname: `/login` });
+  } catch (err) {
+    console.log(err);
+    yield interceptError(LoginCreators.getLoginFailure, err);
+  }
+}
+
 export default function* () {
-  yield all([takeLatest(LoginTypes.GET_REQUEST, getLogin)]);
+  yield all([
+    takeLatest(LoginTypes.GET_REQUEST, getLogin),
+    takeLatest(LoginTypes.GET_REQUEST, getLoginRedirect),
+  ]);
 }

@@ -96,19 +96,20 @@ export default function SideDrawer() {
       onClick={toggleDrawer(side, false)}
       onKeyDown={toggleDrawer(side, false)}>
       <List className={classes.listMenus}>
-        {appPages.filter(menuFilter).map(menu => (
-          <React.Fragment key={menu.id}>
-            <Link href={menu.path}>
-              <ListItem button>
-                <ListItemIcon style={{ color: '#aaa' }}>
-                  {menu.icon}
-                </ListItemIcon>
-                <ListItemText primary={menu.name} />
-              </ListItem>
-            </Link>
-            {menu.id === 'home' && <Divider />}
-          </React.Fragment>
-        ))}
+        {userData &&
+          appPages.filter(menuFilter).map(menu => (
+            <React.Fragment key={menu.id}>
+              <Link href={menu.path}>
+                <ListItem button>
+                  <ListItemIcon style={{ color: '#aaa' }}>
+                    {menu.icon}
+                  </ListItemIcon>
+                  <ListItemText primary={menu.name} />
+                </ListItem>
+              </Link>
+              {menu.id === 'home' && <Divider />}
+            </React.Fragment>
+          ))}
       </List>
       <Divider />
       <ListItem button onClick={onLogout}>

@@ -8,6 +8,7 @@ import { Container, makeStyles, Modal } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import ModalFails from 'components/modalFails';
 import { Creators as UserDetailsCreators } from 'appStore/ducks/user/details';
+import { Creators as LoginCreators } from 'appStore/ducks/login';
 import { Creators as ServicesListCreators } from 'appStore/ducks/services/list';
 import { Creators as SchedulesDetailsCreators } from 'appStore/ducks/schedules/details';
 import { Creators as SchedulesCreateCreators } from 'appStore/ducks/schedules/create';
@@ -51,7 +52,10 @@ const useStyles = makeStyles(theme => ({
 
 export default function Index({ slug }) {
   const dispatch = useDispatch();
+
   const classes = useStyles();
+  
+  const { isAuth } = useSelector(state => state.auth);
 
   const {
     data: dataUser,
@@ -71,7 +75,6 @@ export default function Index({ slug }) {
   const {
     data: companyData,
   } = useSelector(state => state.company.details);
-  console.log(companyData, slug, 'slug');
   const [openModalFail, setOpenModalFail] = useState(false);
   const handleCloseModal = () => {
     setOpenModalFail(false);
@@ -116,12 +119,17 @@ export default function Index({ slug }) {
   }, [selectedDate]);
 
   useEffect(() => {
-    if (!loadingUser) {
-      dispatch(UserDetailsCreators.getRequest())
-      getSchedulesDay();
-      dispatch(ServicesListCreators.getRequest());
+    
+    if(slug) {
+      if(isAuth){
+        dispatch(CompanyDetailsCreators.getRequest({ slug }));
+        dispatch(UserDetailsCreators.getRequest())
+        getSchedulesDay();
+        dispatch(ServicesListCreators.getRequest());
+      }  else {
+        dispatch(LoginCreators.getLoginRedirect(slug));
+      }
     }
-    if(slug) dispatch(CompanyDetailsCreators.getRequest({ slug }));
   }, []);
 
   const onSchedulerSubmit = data => {
@@ -181,10 +189,9 @@ const Greetings = ({ name }) => {
   )
 };
 
-Index.getInitialProps = async ({ store, ...ctx }) => {
+Index.getInitialProps = async ({ ...ctx }) => {
   const slug = ctx.query.slug;
   if(slug && slug.indexOf(".") === -1) {
-    // store.dispatch(CompanyDetailsCreators.getRequest({ slug: ctx.query.slug }));
     return { slug };
   }
 };
