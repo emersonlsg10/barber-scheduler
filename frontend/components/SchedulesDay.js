@@ -194,7 +194,7 @@ export default function SchedulesDay({
                   verifyHourSchedule={verifyHourSchedule}
                   dataUser={dataUser}
                   handleOpenModal={handleOpenModal}
-                  selectedTim={selectedTime}
+                  selectedTime={selectedTime}
                   loadingSchedules={loadingSchedules}
                   loadingScheduleDetails={loadingScheduleDetails}
                   countLimitBefore={countLimitBefore}

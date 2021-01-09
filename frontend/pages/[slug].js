@@ -81,10 +81,12 @@ export default function Index({ slug }) {
   const [selectedTime, setSelectedTime] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const getSchedulesDay = () => {
+  const getSchedulesDay = slug => {
+    console.log('isAuth')
     dispatch(
       SchedulesListDetailsCreators.getRequest({
         date: moment(selectedDate).format('YYYY-MM-DD'),
+        slug,
       })
     );
   };
@@ -107,7 +109,7 @@ export default function Index({ slug }) {
       handleOpenModal();
       setSelectedDate(new Date());
     } else {
-      getSchedulesDay();
+      getSchedulesDay(slug);
     }
   }, [selectedDate]);
 
@@ -116,7 +118,6 @@ export default function Index({ slug }) {
       if (isAuth) {
         dispatch(CompanyDetailsCreators.getRequest({ slug }));
         dispatch(UserDetailsCreators.getRequest());
-        getSchedulesDay();
         dispatch(ServicesListCreators.getRequest());
       } else {
         dispatch(LoginCreators.getLoginRedirect(slug));
@@ -133,7 +134,7 @@ export default function Index({ slug }) {
       })
     );
   };
-
+  
   return (
     <>
       <Layout maxWidth={false}>
@@ -151,7 +152,7 @@ export default function Index({ slug }) {
                 justifyContent: 'center',
               }}>
               <SchedulesDay
-                dataSchedules={dataSchedules ? dataSchedules?.data : []}
+                dataSchedules={dataSchedules ? dataSchedules : []}
                 loadingSchedules={loadingSchedules}
                 dataServices={dataServices}
                 loadingServices={loadingServices}
