@@ -49,32 +49,26 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
 export default function Index({ slug }) {
   const dispatch = useDispatch();
 
   const classes = useStyles();
-  
+
   const { isAuth } = useSelector(state => state.auth);
 
-  const {
-    data: dataUser,
-    loading: loadingUser,
-  } = useSelector(state => state.user.details);
+  const { data: dataUser, loading: loadingUser } = useSelector(
+    state => state.user.details
+  );
 
-  const {
-    data: dataSchedules,
-    loading: loadingSchedules,
-  } = useSelector(state => state.schedules.list);
+  const { data: dataSchedules, loading: loadingSchedules } = useSelector(
+    state => state.schedules.list
+  );
 
-  const {
-    data: dataServices,
-    loading: loadingServices,
-  } = useSelector(state => state.services.list);
+  const { data: dataServices, loading: loadingServices } = useSelector(
+    state => state.services.list
+  );
 
-  const {
-    data: companyData,
-  } = useSelector(state => state.company.details);
+  const { data: companyData } = useSelector(state => state.company.details);
   const [openModalFail, setOpenModalFail] = useState(false);
   const handleCloseModal = () => {
     setOpenModalFail(false);
@@ -105,8 +99,8 @@ export default function Index({ slug }) {
   };
 
   useEffect(() => {
-
-    var date = moment(selectedDate).format('YYYY-MM-DD')
+    if(!isAuth) return;
+    var date = moment(selectedDate).format('YYYY-MM-DD');
     var now = moment().format('YYYY-MM-DD');
 
     if (now > date) {
@@ -115,64 +109,72 @@ export default function Index({ slug }) {
     } else {
       getSchedulesDay();
     }
-
   }, [selectedDate]);
 
   useEffect(() => {
-    
-    if(slug) {
-      if(isAuth){
+    if (slug) {
+      if (isAuth) {
         dispatch(CompanyDetailsCreators.getRequest({ slug }));
-        dispatch(UserDetailsCreators.getRequest())
+        dispatch(UserDetailsCreators.getRequest());
         getSchedulesDay();
         dispatch(ServicesListCreators.getRequest());
-      }  else {
+      } else {
         dispatch(LoginCreators.getLoginRedirect(slug));
       }
     }
   }, []);
 
   const onSchedulerSubmit = data => {
-    dispatch(SchedulesCreateCreators.getRequest({ 
-      service_id: [...data.filter(item => item.checked)],
-      date: moment(selectedDate).format('YYYY-MM-DD'), 
-      schedule: selectedTime,
-    }));
+    dispatch(
+      SchedulesCreateCreators.getRequest({
+        service_id: [...data.filter(item => item.checked)],
+        date: moment(selectedDate).format('YYYY-MM-DD'),
+        schedule: selectedTime,
+      })
+    );
   };
 
   return (
     <>
       <Layout maxWidth={false}>
-        <Container maxWidth={'lg'}>
-          <Greetings name={dataUser?.username} />
-          <CalendarPicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-          <h3 className={classes.title}>Selecione um horário: </h3>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}>
-            <SchedulesDay
-              dataSchedules={dataSchedules ? dataSchedules?.data : []}
-              loadingSchedules={loadingSchedules}
-              dataServices={dataServices}
-              loadingServices={loadingServices}
-              getSchedulesDay={getSchedulesDay}
-              getSchedulesDetails={getSchedulesDetails}
-              selectedDate={selectedDate && moment(selectedDate).format('DD/MM/YYYY')}
-              selectedTime={selectedTime}
-              setSelectedTime={setSelectedTime}
-              onSchedulerSubmit={onSchedulerSubmit}
-              dataUser={dataUser}
+        {isAuth && (
+          <Container maxWidth={'lg'}>
+            <Greetings name={dataUser?.username} />
+            <CalendarPicker
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
             />
-          </div>
-        </Container>
+            <h3 className={classes.title}>Selecione um horário: </h3>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+              }}>
+              <SchedulesDay
+                dataSchedules={dataSchedules ? dataSchedules?.data : []}
+                loadingSchedules={loadingSchedules}
+                dataServices={dataServices}
+                loadingServices={loadingServices}
+                getSchedulesDay={getSchedulesDay}
+                getSchedulesDetails={getSchedulesDetails}
+                selectedDate={
+                  selectedDate && moment(selectedDate).format('DD/MM/YYYY')
+                }
+                selectedTime={selectedTime}
+                setSelectedTime={setSelectedTime}
+                onSchedulerSubmit={onSchedulerSubmit}
+                dataUser={dataUser}
+              />
+            </div>
+          </Container>
+        )}
         <Modal
           open={openModalFail}
           onClose={handleCloseModal}
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description">
           <ModalFails
-            error={'Não é possível agendar pra ontem.'}
+            error={'Não é possível agendar para datas anteriores.'}
             setOpenModalFail={setOpenModalFail}
             showButton={false}
           />
@@ -185,13 +187,15 @@ export default function Index({ slug }) {
 const Greetings = ({ name }) => {
   const classes = useStyles();
   return (
-    <div className={classes.greetings}>Olá <strong>{name}</strong>, seja bem vindo!</div>
-  )
+    <div className={classes.greetings}>
+      Olá <strong>{name}</strong>, seja bem vindo!
+    </div>
+  );
 };
 
 Index.getInitialProps = async ({ ...ctx }) => {
   const slug = ctx.query.slug;
-  if(slug && slug.indexOf(".") === -1) {
+  if (slug && slug.indexOf('.') === -1) {
     return { slug };
   }
 };

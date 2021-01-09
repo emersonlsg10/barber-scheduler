@@ -29,7 +29,9 @@ function* getLogin({ payload }) {
     yield delay(1000);
     yield put(LoginCreators.getLoginSuccess());
     if (!route) {
-      yield call(Router.replace, { pathname: `/${redirect}` });
+      if (redirect !== '/')
+        yield call(Router.replace, { pathname: `/${redirect}` });
+      else yield call(Router.replace, { pathname: `/` });
     } else {
       yield delay(1000);
       yield window.location.assign(route);
@@ -52,6 +54,6 @@ function* getLoginRedirect() {
 export default function* () {
   yield all([
     takeLatest(LoginTypes.GET_REQUEST, getLogin),
-    takeLatest(LoginTypes.GET_REQUEST, getLoginRedirect),
+    takeLatest(LoginTypes.GET_REDIRECT, getLoginRedirect),
   ]);
 }

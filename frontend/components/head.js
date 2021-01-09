@@ -17,7 +17,7 @@ const Head = props => (
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" sizes="192x192" href="/static/touch-icon.png" />
     <link rel="apple-touch-icon" href="/static/touch-icon.png" />
-    <link rel="icon" href="/favicon-32x32.png" />
+    <link rel="icon" href="/public-icon.png" />
     {/* <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"

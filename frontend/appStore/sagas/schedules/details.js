@@ -1,4 +1,4 @@
-import { call, put, all, takeLatest, delay } from 'redux-saga/effects';
+import { call, put, all, takeLatest, select } from 'redux-saga/effects';
 import {
   Creators as SchedulesDetailsCreators,
   Types as SchedulesDetailsTypes,
@@ -11,9 +11,10 @@ import interceptError from 'services/interceptError';
 function* getSchedulesList({ payload }) {
   try {
     const { date, schedule } = payload;
+    const { redirect } = yield select(state => state.login);
     const request = call(
       api.get,
-      `api/v1/schedules/1?date=${date}&schedule=${schedule}`
+      `api/v1/schedules/${redirect}?date=${date}&schedule=${schedule}`
     );
     const response = yield callApi(request);
     yield interceptResponse(response);

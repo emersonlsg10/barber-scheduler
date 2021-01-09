@@ -123,19 +123,20 @@ class ScheduleController {
       const slug = params.id;
       const company = await Company.query().where("slug", slug).first();
       if (!company) throw "Estabelecimento não encontrado!";
-  
+
       let schedules = null;
-      if(date && schedule) {
+      if (date && schedule) {
         schedules = await Schedule.query()
-        .where("company_id", company.id)
-        .where("date", date)
-        .where("schedule", schedule)
-        .fetch();
+          .where("company_id", company.id)
+          .where("date", date)
+          .where("schedule", schedule)
+          .fetch();
       } else {
         schedules = await Schedule.query()
           .where("company_id", company.id)
+          .where("date", date)
           .fetch();
-      }        
+      }
       return formatResponse({
         response,
         status: 200,
