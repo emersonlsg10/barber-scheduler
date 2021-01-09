@@ -17,7 +17,7 @@ class ServiceSeeder {
   async run () {
     const serviceArray = await Factory
       .model('App/Models/Service')
-      .createMany(10)
+      .createMany(4)
   }
 }
 

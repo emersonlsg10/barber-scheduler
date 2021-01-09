@@ -19,9 +19,9 @@ const moment = use('moment')
 // User blueprint
 Factory.blueprint('App/Models/User', async (faker) => {
   return {
-    username: faker.username(),
-    email: faker.email(),
-    slug: 'emerson-barber-' + (Math.random() * (100 - 1) + 1),
+    username: 'Emerson',
+    email: 'emersonlsg10@gmail.com',
+    slug: 'emerson-barber',
     phone: faker.phone(),
     cpf: faker.cpf(),
     city: faker.city(),
@@ -71,6 +71,37 @@ Factory.blueprint('App/Models/Schedule', async (faker) => {
     total_time: 60,
     total_value: 30,
     client_id: 3,
+    company_id: 1,
     service_id: JSON.stringify(service_id)
+  }
+})
+
+const hours_per_day = [
+  '07',
+  '08',
+  '09',
+  '10',
+  '11',
+  '12',
+  '13',
+  '14',
+  '15',
+  '16',
+  '17',
+  '18',
+  '19',       
+];
+const days = [ 0, 1, 2, 3, 4, 5, 6, 7];
+// Company blueprint
+Factory.blueprint('App/Models/Company', async (faker) => {
+  return {
+    name: 'Barbearia Emerson',
+    slug: 'emerson-barber',
+    theme: 'dark',
+    hours_per_day: JSON.stringify(hours_per_day),
+    razao: 30,
+    per_schedule: 4,
+    days: JSON.stringify(days),
+    user_id: 1,
   }
 })

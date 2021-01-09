@@ -15,7 +15,6 @@ import { setCookie } from 'utils/cookie';
 function* getLogin({ payload }) {
   try {
     const { redirect } = yield select(state => state.login);
-    console.log(redirect)
     const { email, password, route } = payload;
     yield call(api.setHeader, 'Authorization', '');
     const response = yield call(api.post, 'api/v1/login', {
