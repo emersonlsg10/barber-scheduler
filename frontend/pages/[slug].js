@@ -56,7 +56,7 @@ export default function Index({ slug }) {
 
   const { isAuth } = useSelector(state => state.auth);
 
-  const { data: companyData } = useSelector(state => state.company.details);
+  const { data: companyData, loading: companyLoading } = useSelector(state => state.company.details);
   const { data: dataUser, loading: loadingUser } = useSelector(
     state => state.user.details
   );
@@ -168,6 +168,8 @@ export default function Index({ slug }) {
                 setSelectedTime={setSelectedTime}
                 onSchedulerSubmit={onSchedulerSubmit}
                 dataUser={dataUser}
+                companyLoading={companyLoading}
+                hoursPerDays={companyData ? JSON.parse(companyData?.hours_per_day) : []}
               />
             </div>
           </Container>

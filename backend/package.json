@@ -9,6 +9,7 @@
     "dev": "adonis serve --dev",
     "xampp": "sudo /etc/init.d/apache2 stop && sudo /opt/lampp/lampp start",
     "seed": "adonis seed --files='UserSeeder.js, CompanySeeder.js, ServiceSeeder.js, ScheduleSeeder.js",
+    "seedSchedule": "adonis seed --files='ScheduleSeeder.js'",
     "test": "node ace test"
   },
   "keywords": [

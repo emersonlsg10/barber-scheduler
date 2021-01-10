@@ -69,7 +69,9 @@ export default function SchedulesDay({
   selectedTime,
   setSelectedTime,
   onSchedulerSubmit,
-  dataUser
+  dataUser,
+  hoursPerDays,
+  companyLoading,
 }) {
   const classes = useStyles();
   const {
@@ -179,11 +181,11 @@ export default function SchedulesDay({
 
   return (
     <div className={classes.root}>
-      <Backdrop className={classes.backdrop} open={loadingScheduleDetails || delayLoading}>
+      <Backdrop className={classes.backdrop} open={loadingScheduleDetails || delayLoading || companyLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
       <List component="nav" className={classes.list} aria-label="main mailbox folders">
-        {configs.hoursPerDays.map((hour, index) => (
+        {hoursPerDays?.map((hour, index) => (
           <>
             {configs.perHour.map((min) => (
               <>
@@ -237,7 +239,7 @@ const ItemList = ({
   const classes = useStyles();
   const VerifySchedule = verifyHourSchedule(`${hour}:${min}:00`);
   const VerifyBefore = countLimitBefore(`${hour}:${min}:00`);
-
+  console.log(VerifyBefore);
   return (
     <>
       { VerifySchedule || VerifyBefore ? (
