@@ -5,6 +5,7 @@ import userDetails from './user/details';
 import schedulesList from './schedules/list';
 import schedulesDetails from './schedules/details';
 import schedulesCreate from './schedules/create';
+import schedulesDelete from './schedules/delete';
 import servicesList from './services/list';
 import servicesDelete from './services/delete';
 import servicesCreate from './services/create';
@@ -26,6 +27,7 @@ export default combineReducers({
     list: schedulesList,
     details: schedulesDetails,
     create: schedulesCreate,
+    delete: schedulesDelete,
   }),
   services: combineReducers({
     list: servicesList,

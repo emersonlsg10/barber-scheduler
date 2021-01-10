@@ -224,7 +224,7 @@ class ScheduleController {
       return formatResponse({
         response,
         status: 201,
-        msg: "Cadastro deletado com sucesso.",
+        msg: "Agendamento cancelado com sucesso.",
         total: 1,
         data: schedule,
       });

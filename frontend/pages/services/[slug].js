@@ -50,7 +50,7 @@ export default function Index({ slug }) {
       <Layout maxWidth={false} slug={slug}>
         <Container maxWidth={'lg'}>
           <div className={classes.title}>
-            Cadadastro de <strong>Serviços</strong>
+            Cadastro de <strong>Serviços</strong>
           </div>
           <ServiceForm onSubmit={onSubmit} loading={loadingServicesCreate} />
           <ServiceTable

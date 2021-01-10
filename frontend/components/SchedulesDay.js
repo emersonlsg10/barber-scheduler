@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Backdrop from '@material-ui/core/Backdrop';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
@@ -13,6 +13,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import IconButton from '@material-ui/core/IconButton';
+import CancelIcon from '@material-ui/icons/Cancel';
+import { Creators as SchedulesDeleteCreators } from 'appStore/ducks/schedules/delete';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,26 +39,14 @@ const useStyles = makeStyles(theme => ({
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
   },
+  labelReserva: {
+    fontStyle: 'italic',
+    fontSize: 13,
+  },
 }));
 
 const configs = {
-  hoursPerDays: [
-    '07',
-    '08',
-    '09',
-    '10',
-    '11',
-    '12',
-    '13',
-    '14',
-    '15',
-    '16',
-    '17',
-    '18',
-    '19',
-  ],
   perHour: ['00'],
-  razao: 30,
 };
 
 export default function SchedulesDay({
@@ -73,8 +64,11 @@ export default function SchedulesDay({
   hoursPerDays,
   companyLoading,
   per_schedule,
+  razao,
 }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   const {
     data: dataScheduleDetails,
     loading: loadingScheduleDetails,
@@ -85,6 +79,11 @@ export default function SchedulesDay({
     data: dataScheduleCreate,
   } = useSelector(state => state.schedules.create);
 
+  const {
+    loading: loadingScheduleDelete,
+    data: dataScheduleDelete,
+  } = useSelector(state => state.schedules.delete);
+
   const [openModal, setOpenModal] = useState(false);
   const [limitTimeService, setLimitTimeService] = useState(null);
 
@@ -94,6 +93,22 @@ export default function SchedulesDay({
 
   const filterHourSchedule = hour => {
     return dataSchedules?.filter(item => item.schedule === hour);
+  };
+
+  const [selectedSchedule, setSelectedSchedule] = useState(null);
+  const [selectedScheduleServices, setSelectedScheduleServices] = useState(
+    null
+  );
+  const onEditSchedule = schedule => {
+    setSelectedScheduleServices(JSON.parse(schedule.service_id));
+    setSelectedSchedule(schedule);
+    setTimeout(() => {
+      setOpenModal(true);
+    }, 200);
+  };
+
+  const onCancelSchedule = id => {
+    dispatch(SchedulesDeleteCreators.getRequest({ id }));
   };
 
   const handleOpenModal = (hour, min, rowData) => {
@@ -109,12 +124,14 @@ export default function SchedulesDay({
 
   const handleCloseModal = () => {
     setOpenModal(false);
+    setSelectedScheduleServices(null);
+    setSelectedSchedule(null);
   };
 
   const countLimit = schedule => {
     let count = 1;
     let scanTime = 120; // minutes
-    let tempRazao = configs.razao;
+    let tempRazao = razao;
     let tempHour = `${schedule}`;
     let firstOneFounded = null;
 
@@ -136,7 +153,7 @@ export default function SchedulesDay({
 
   const countLimitBefore = schedule => {
     let scanTime = 60; // minutes
-    let tempRazao = configs.razao;
+    let tempRazao = razao;
     let tempHour = `${schedule}`;
 
     for (let i = 1; i <= scanTime / tempRazao; i++) {
@@ -175,13 +192,13 @@ export default function SchedulesDay({
   }, [dataScheduleDetails]);
 
   useEffect(() => {
-    if (!loadingScheduleCreate && !!dataScheduleCreate) {
+    if ((!loadingScheduleCreate && !!dataScheduleCreate) || (!loadingScheduleDelete && !!dataScheduleDelete)) {
       getSchedulesDay();
       setTimeout(() => {
         handleCloseModal();
       }, 1500);
     }
-  }, [dataScheduleCreate]);
+  }, [dataScheduleCreate, dataScheduleDelete]);
 
   const [delayLoading, setDelayLoading] = useState(false);
   useEffect(() => {
@@ -222,6 +239,7 @@ export default function SchedulesDay({
                   countLimitBefore={countLimitBefore}
                   filterHourSchedule={filterHourSchedule}
                   per_schedule={per_schedule}
+                  onEditSchedule={onEditSchedule}
                 />
               </>
             ))}
@@ -234,14 +252,19 @@ export default function SchedulesDay({
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description">
         <ModalScheduler
-          dataServices={dataServices ? dataServices : []}
+          dataServices={
+            !selectedScheduleServices ? dataServices : selectedScheduleServices
+          }
+          selectedSchedule={selectedSchedule}
           loadingServices={loadingServices}
           selectedTime={selectedTime}
           limitTimeService={limitTimeService && limitTimeService}
           selectedDate={selectedDate}
           onSchedulerSubmit={onSchedulerSubmit}
           loadingScheduleCreate={loadingScheduleCreate}
-          razao={configs.razao}
+          onCancelSchedule={onCancelSchedule}
+          loadingScheduleDelete={loadingScheduleDelete}
+          razao={razao}
         />
       </Modal>
     </div>
@@ -251,37 +274,44 @@ export default function SchedulesDay({
 const ItemList = ({
   hour,
   min,
-  verifyHourSchedule,
   dataUser,
   handleOpenModal,
-  selectedTime,
-  loadingSchedules,
-  loadingScheduleDetails,
-  countLimitBefore,
   filterHourSchedule,
   per_schedule,
+  onEditSchedule,
 }) => {
   const classes = useStyles();
   // const VerifySchedule = verifyHourSchedule(`${hour}:${min}:00`);
   // const VerifyBefore = countLimitBefore(`${hour}:${min}:00`);
   const VerifyCount = filterHourSchedule(`${hour}:${min}:00`);
+  const mySchedule = VerifyCount.find(item => item.client_id === dataUser?.id);
+
   return (
     <>
-      {VerifyCount.length >= per_schedule ? (
+      {VerifyCount.length >= per_schedule || mySchedule ? (
         <ListItem
-          onClick={() => console.log('teste')}
           button
+          onClick={() => mySchedule && onEditSchedule(mySchedule)}
           className={classes.listItem}>
           <ListItemIcon>
             <AccessTimeIcon style={{ color: 'white' }} />
           </ListItemIcon>
           <ListItemText primary={`${hour}:${min}`} />
-          <span style={{ fontStyle: 'italic', fontSize: 13 }}>
-            {dataUser &&
-            VerifyCount.find(item => item.client_id === dataUser?.id)
-              ? 'Reservado por você'
-              : 'Reservado por outra pessoa'}
-          </span>
+          {dataUser && mySchedule ? (
+            <>
+              <span className={classes.labelReserva}>Reservado</span>
+              <IconButton
+                style={{ padding: 0, marginLeft: 10 }}
+                aria-label="delete"
+                color="primary">
+                <CancelIcon color="primary" />
+              </IconButton>
+            </>
+          ) : (
+            <span className={classes.labelReserva}>
+              Reservado por outra pessoa
+            </span>
+          )}
         </ListItem>
       ) : (
         <ListItem
@@ -292,7 +322,9 @@ const ItemList = ({
             <AccessTimeIcon style={{ color: 'white' }} />
           </ListItemIcon>
           <ListItemText primary={`${hour}:${min}`} />
-            <span style={{ fontStyle: 'italic', fontSize: 11 }}>{`${per_schedule - VerifyCount.length} vagas`}</span>
+          <span className={classes.labelReserva}>{`${
+            per_schedule - VerifyCount.length
+          } vagas`}</span>
           <AddCircleOutlineIcon style={{ marginLeft: 10 }} />
         </ListItem>
       )}

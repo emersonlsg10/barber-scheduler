@@ -129,7 +129,7 @@ export default function Index({ slug }) {
     if (companyData) {
       dispatch(
         SchedulesCreateCreators.getRequest({
-          service_id: [...data.filter(item => item.checked)],
+          service_id: [...data],
           date: moment(selectedDate).format('YYYY-MM-DD'),
           schedule: selectedTime,
           company_id: companyData?.id,
@@ -171,6 +171,7 @@ export default function Index({ slug }) {
                 companyLoading={companyLoading}
                 hoursPerDays={companyData ? JSON.parse(companyData?.hours_per_day) : []}
                 per_schedule={companyData ? companyData?.per_schedule : 1}
+                razao={companyData ? companyData?.razao : 1}
               />
             </div>
           </Container>

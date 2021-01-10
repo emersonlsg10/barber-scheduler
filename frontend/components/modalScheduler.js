@@ -57,14 +57,20 @@ function ModalScheduler({
   selectedDate,
   onSchedulerSubmit,
   loadingScheduleCreate,
+  selectedSchedule,
+  onCancelSchedule,
+  loadingScheduleDelete,
 }) {
   const classes = useStyles();
-
   const [state, setState] = useState(null);
   const [countTime, setCountTime] = useState(0);
   const [countPrice, setCountPrice] = useState(0);
-
+  const [showCancelMessage, setShowCancelMessage] = useState(false);
   const handleChange = (event, index, rowData) => {
+    if (selectedSchedule) {
+      setShowCancelMessage(true);
+      return;
+    }
     if (event.target.checked) {
       setCountTime(countTime + rowData.time);
       setCountPrice(countPrice + rowData.price);
@@ -86,12 +92,9 @@ function ModalScheduler({
 
   useEffect(() => {
     if (!loadingServices && dataServices) {
-      dataServices?.filter(filterLimitTime).map(item => ({
-        [item.name]: { checked: false, time: item.time, price: item.price },
-      }));
       setState([
         ...dataServices?.filter(filterLimitTime).map(item => ({
-          checked: false,
+          checked: !!item.checked,
           time: item.time,
           price: item.price,
           name: item.name,
@@ -113,24 +116,22 @@ function ModalScheduler({
           <FormGroup style={{ marginTop: 20 }}>
             {dataServices &&
               dataServices?.length > 0 &&
-              dataServices
-                .filter(filterLimitTime)
-                .map((item, index) => (
-                  <FormControlLabel
-                    key={item.id}
-                    control={
-                      <Checkbox
-                        checked={item.checked}
-                        onChange={e => handleChange(e, index, item)}
-                        color="primary"
-                        name={item.name}
-                      />
-                    }
-                    label={`${item.name} - ${appUtils.formatPrice(
-                      item.price
-                    )} - ${item.time} min`}
-                  />
-                ))}
+              dataServices.map((item, index) => (
+                <FormControlLabel
+                  key={item.id}
+                  control={
+                    <Checkbox
+                      checked={item.checked}
+                      onChange={e => handleChange(e, index, item)}
+                      color="primary"
+                      name={item.name}
+                    />
+                  }
+                  label={`${item.name} - ${appUtils.formatPrice(
+                    item.price
+                  )} - ${item.time} min`}
+                />
+              ))}
           </FormGroup>
         </FormControl>
         <div style={{ marginTop: 20 }}>
@@ -156,17 +157,27 @@ function ModalScheduler({
               min neste horário selecionado!
             </span>
           )}
+          {showCancelMessage && (
+            <span style={{ fontSize: 13, fontWeight: 'bold', color: 'red' }}>
+              Por enquanto você não pode editar, apenas cancelar e agendar
+              novamente!
+            </span>
+          )}
         </div>
         <Button
           type="submit"
-          onClick={() => countTime > 0 && onSchedulerSubmit(state)}
+          onClick={() =>
+            selectedSchedule
+              ? onCancelSchedule(selectedSchedule.id)
+              : countTime > 0 && onSchedulerSubmit(state)
+          }
           disabled={!filterLimitTime({ time: countTime })}
           className={classes.buttonLogin}
           variant="contained">
-          {loadingScheduleCreate ? (
+          {loadingScheduleCreate || loadingScheduleDelete ? (
             <CircularProgress size={22} color="primary" />
           ) : (
-            'Agendar'
+            <>{selectedSchedule ? 'Cancelar Agendamento' : 'Agendar'}</>
           )}
         </Button>
       </div>
