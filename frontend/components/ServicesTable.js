@@ -19,6 +19,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: 15,
   },
   tableHead: {
+    color: '#fff',
     fontWeight: 'bolder',
     fontSize: 18,
   },
@@ -36,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 const StyledTableRow = withStyles(theme => ({
   root: {
     '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.background.gray,
+      backgroundColor: theme.palette.background.darkGray,
     },
   },
 }))(TableRow);
@@ -109,6 +110,13 @@ export default function ServiceTable({
         .MuiTableContainer-root {
           width: 100%;
           overflow-x: hidden !important;
+        }
+        .MuiTableContainer-root {
+          background-color: #252525;
+          color: #fff;
+        }
+        .MuiTableCell-body {
+          color: #fff;
         }
       `}</style>
     </>
