@@ -210,7 +210,7 @@ export default function SchedulesDay({
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description">
         <ModalScheduler
-          dataServices={dataServices ? dataServices?.data : []}
+          dataServices={dataServices ? dataServices : []}
           loadingServices={loadingServices}
           selectedTime={selectedTime}
           limitTimeService={limitTimeService && limitTimeService}

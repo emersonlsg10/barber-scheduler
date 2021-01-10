@@ -81,7 +81,7 @@ export default function Index({ slug }) {
   const [selectedTime, setSelectedTime] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const getSchedulesDay = slug => {
+  const getSchedulesDay = () => {
     dispatch(
       SchedulesListDetailsCreators.getRequest({
         date: moment(selectedDate).format('YYYY-MM-DD'),
@@ -101,7 +101,7 @@ export default function Index({ slug }) {
   };
 
   useEffect(() => {
-    if (!isAuth) return;
+    if (!isAuth && !slug) return;
     var date = moment(selectedDate).format('YYYY-MM-DD');
     var now = moment().format('YYYY-MM-DD');
 
@@ -109,15 +109,15 @@ export default function Index({ slug }) {
       handleOpenModal();
       setSelectedDate(new Date());
     } else {
-      getSchedulesDay(slug);
+      getSchedulesDay();
     }
   }, [selectedDate]);
 
   useEffect(() => {
     if (slug) {
       if (isAuth) {
-        dispatch(CompanyDetailsCreators.getRequest({ slug }));
         dispatch(UserDetailsCreators.getRequest());
+        dispatch(CompanyDetailsCreators.getRequest({ slug }));
         dispatch(ServicesListCreators.getRequest({ slug }));
       } else {
         dispatch(LoginCreators.getLoginRedirect(slug));
@@ -126,13 +126,16 @@ export default function Index({ slug }) {
   }, []);
 
   const onSchedulerSubmit = data => {
-    dispatch(
-      SchedulesCreateCreators.getRequest({
-        service_id: [...data.filter(item => item.checked)],
-        date: moment(selectedDate).format('YYYY-MM-DD'),
-        schedule: selectedTime,
-      })
-    );
+    if (companyData) {
+      dispatch(
+        SchedulesCreateCreators.getRequest({
+          service_id: [...data.filter(item => item.checked)],
+          date: moment(selectedDate).format('YYYY-MM-DD'),
+          schedule: selectedTime,
+          company_id: companyData?.id,
+        })
+      );
+    }
   };
 
   return (

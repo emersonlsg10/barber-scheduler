@@ -79,8 +79,10 @@ class ScheduleController {
       client_id,
       total_time,
       total_value,
+      company_id,
     } = request.all();
     const scheduleObj = new Schedule();
+    scheduleObj.company_id = company_id;
     scheduleObj.date = date;
     scheduleObj.schedule = schedule;
     scheduleObj.service_id = JSON.stringify(service_id);

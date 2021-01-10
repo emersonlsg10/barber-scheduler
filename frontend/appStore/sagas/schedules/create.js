@@ -12,10 +12,12 @@ import interceptError from 'services/interceptError';
 
 function* getSchedulesCreate({ payload }) {
   try {
-    const { date, schedule, service_id } = payload;
+    const { date, schedule, service_id, company_id } = payload;
+
     const { total_time } = service_id.reduce((a, b) => ({
       total_time: a.time + b.time,
     }));
+
     const { total_value } = service_id.reduce((a, b) => ({
       total_value: a.price + b.price,
     }));
@@ -26,6 +28,7 @@ function* getSchedulesCreate({ payload }) {
       total_time,
       total_value,
       service_id,
+      company_id,
     });
     const response = yield callApi(request);
     yield interceptResponse(response);
