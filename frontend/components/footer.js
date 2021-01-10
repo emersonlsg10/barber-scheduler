@@ -80,7 +80,7 @@ const Footer = () => {
                     fontSize: '14px',
                   }}>
                   {' '}
-                  0800 591 1393{' '}
+                  (62) 9 8226-2854{' '}
                 </span>
               </div>
 
@@ -105,7 +105,7 @@ const Footer = () => {
                     fontSize: '14px',
                   }}>
                   {' '}
-                  comunidadecis@febracis.com.br{' '}
+                  lesoftdesenvolvedora@gmail.com
                 </span>
               </div>
 
@@ -133,11 +133,11 @@ const Footer = () => {
                 flexDirection: 'column',
                 textAlign: 'left',
               }}>
-              Cis Continuum* | Um canal de ferramentas práticas da
+              Agenda Aqui * | Seu Sistema de agendamento feito pela
               <a
-                href="https://www.febracis.com.br/"
+                href="https://instagram.com/lesoftdesenvolvedora"
                 style={{ color: '#EB961F' }}>
-                Febracis Coaching
+                Lesoft Desenvolvedora
               </a>
             </div>
           </Grid>
