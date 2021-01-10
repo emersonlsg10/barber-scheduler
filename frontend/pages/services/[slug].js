@@ -33,7 +33,7 @@ export default function Index({ slug }) {
   );
 
   useEffect(() => {
-    dispatch(ServicesListCreators.getRequest());
+    dispatch(ServicesListCreators.getRequest({ slug }));
   }, []);
 
   const onDeleteService = id => {
@@ -43,7 +43,6 @@ export default function Index({ slug }) {
   const onSubmit = formData => {
     dispatch(ServicesCreateCreators.getRequest(formData));
   };
-  console.log(slug)
   return (
     <>
       <Layout maxWidth={false} slug={slug}>
@@ -53,7 +52,7 @@ export default function Index({ slug }) {
           </div>
           <ServiceForm onSubmit={onSubmit} loading={loadingServicesCreate} />
           <ServiceTable
-            dataServices={dataServices?.data}
+            dataServices={dataServices}
             loadingServices={loadingServices}
             onDeleteService={onDeleteService}
           />

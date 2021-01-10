@@ -10,6 +10,10 @@ const StyledSelect = styled(Select)`
   && {
     & > div {
       min-height: 43px;
+      background-color: #252525;
+    }
+    & > div > div > div {
+      color: #fff !important;
     }
   }
 `;
@@ -28,8 +32,8 @@ const StyledInputLabel = styled(InputLabel)`
     padding-right: 5px;
     left: 10px;
     transform: translateY(-50%);
-    background: white;
-    color: #EB961F !important;
+    background: #252525;
+    color: #eb961f !important;
     font-size: 12px;
   }
 `;
@@ -60,7 +64,7 @@ const CustomSelect = ({
         field.name,
         isMulti
           ? option.map(item => ({ id: item.value, name: item.label }))
-          : option.value,
+          : option.value
       );
     }
   };
@@ -68,14 +72,14 @@ const CustomSelect = ({
   const getValue = () => {
     if (isMulti) {
       const selecteds = options.filter(option =>
-        field.value.map(x => x.id).includes(option.id),
+        field.value.map(x => x.id).includes(option.id)
       );
       setSelectedOption(
-        selecteds.map(item => ({ value: item.id, label: item.name })),
+        selecteds.map(item => ({ value: item.id, label: item.name }))
       );
     } else {
       const selected = selectOptions.find(
-        option => option.value === field.value,
+        option => option.value === field.value
       );
       if (selected) {
         setSelectedOption(selected);

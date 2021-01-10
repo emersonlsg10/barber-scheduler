@@ -8,7 +8,8 @@ import NumberFormat from 'react-number-format';
 const StyledTextField = styled(TextField)`
   && {
     .MuiOutlinedInput-root {
-      background: white;
+      background: transparent;
+      color: white;
     }
     & .MuiOutlinedInput-input {
       padding: 12px 12px;
