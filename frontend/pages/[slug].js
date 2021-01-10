@@ -56,6 +56,7 @@ export default function Index({ slug }) {
 
   const { isAuth } = useSelector(state => state.auth);
 
+  const { data: companyData } = useSelector(state => state.company.details);
   const { data: dataUser, loading: loadingUser } = useSelector(
     state => state.user.details
   );
@@ -68,7 +69,6 @@ export default function Index({ slug }) {
     state => state.services.list
   );
 
-  const { data: companyData } = useSelector(state => state.company.details);
   const [openModalFail, setOpenModalFail] = useState(false);
   const handleCloseModal = () => {
     setOpenModalFail(false);

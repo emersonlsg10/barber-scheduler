@@ -24,6 +24,7 @@ export default function Index({ slug }) {
   const dispatch = useDispatch();
   const classes = useStyles();
 
+  const { data: companyData } = useSelector(state => state.company.details);
   const { data: dataServices, loading: loadingServices } = useSelector(
     state => state.services.list
   );
@@ -41,6 +42,7 @@ export default function Index({ slug }) {
   };
 
   const onSubmit = formData => {
+    formData.company_id = companyData?.id;
     dispatch(ServicesCreateCreators.getRequest(formData));
   };
   return (

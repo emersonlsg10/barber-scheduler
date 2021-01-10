@@ -12,11 +12,12 @@ import interceptError from 'services/interceptError';
 
 function* getServicesCreate({ payload }) {
   try {
-    const { name, price, time } = payload;
+    const { name, price, time, company_id } = payload;
     const request = call(api.post, `api/v1/services`, {
       name,
       price,
       time: time.id,
+      company_id,
     });
     const response = yield callApi(request);
     yield interceptResponse(response);
@@ -26,7 +27,7 @@ function* getServicesCreate({ payload }) {
     );
     yield put(
       ServicesListCreators.getSuccess({
-        data: { data: [...servicesList?.data, response.data.data] },
+        data: [...servicesList, response.data.data],
         total: total + 1,
       })
     );
