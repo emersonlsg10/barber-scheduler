@@ -31,8 +31,9 @@ export default function (state = initialState, action) {
 }
 
 export const Creators = {
-  getRequest: () => ({
+  getRequest: formData => ({
     type: Types.GET_REQUEST,
+    payload: formData,
   }),
   getSuccess: ({ data, total }) => ({
     type: Types.GET_SUCCESS,

@@ -82,7 +82,6 @@ export default function Index({ slug }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const getSchedulesDay = slug => {
-    console.log('isAuth')
     dispatch(
       SchedulesListDetailsCreators.getRequest({
         date: moment(selectedDate).format('YYYY-MM-DD'),
@@ -96,12 +95,13 @@ export default function Index({ slug }) {
       SchedulesDetailsCreators.getRequest({
         date: moment(selectedDate).format('YYYY-MM-DD'),
         schedule,
+        slug,
       })
     );
   };
 
   useEffect(() => {
-    if(!isAuth) return;
+    if (!isAuth) return;
     var date = moment(selectedDate).format('YYYY-MM-DD');
     var now = moment().format('YYYY-MM-DD');
 
@@ -118,7 +118,7 @@ export default function Index({ slug }) {
       if (isAuth) {
         dispatch(CompanyDetailsCreators.getRequest({ slug }));
         dispatch(UserDetailsCreators.getRequest());
-        dispatch(ServicesListCreators.getRequest());
+        dispatch(ServicesListCreators.getRequest({ slug }));
       } else {
         dispatch(LoginCreators.getLoginRedirect(slug));
       }
@@ -134,7 +134,7 @@ export default function Index({ slug }) {
       })
     );
   };
-  
+
   return (
     <>
       <Layout maxWidth={false}>

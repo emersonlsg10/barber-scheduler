@@ -8,9 +8,10 @@ import { callApi } from 'appStore/sagas/auth';
 import interceptResponse from 'services/interceptResponse';
 import interceptError from 'services/interceptError';
 
-function* getServicesList() {
+function* getServicesList(payload) {
   try {
-    const request = call(api.get, `api/v1/services`);
+    const { slug } = payload;
+    const request = call(api.get, `api/v1/services/${slug}`);
     const response = yield callApi(request);
     yield interceptResponse(response);
     yield put(ServicesListCreators.getSuccess(response.data));
