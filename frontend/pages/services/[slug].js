@@ -20,19 +20,17 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
-export default function Index() {
+export default function Index({ slug }) {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const {
-    data: dataServices,
-    loading: loadingServices,
-  } = useSelector(state => state.services.list);
+  const { data: dataServices, loading: loadingServices } = useSelector(
+    state => state.services.list
+  );
 
-  const {
-    loading: loadingServicesCreate,
-  } = useSelector(state => state.services.create);
+  const { loading: loadingServicesCreate } = useSelector(
+    state => state.services.create
+  );
 
   useEffect(() => {
     dispatch(ServicesListCreators.getRequest());
@@ -45,20 +43,29 @@ export default function Index() {
   const onSubmit = formData => {
     dispatch(ServicesCreateCreators.getRequest(formData));
   };
-
+  console.log(slug)
   return (
     <>
-      <Layout maxWidth={false}>
+      <Layout maxWidth={false} slug={slug}>
         <Container maxWidth={'lg'}>
-          <div className={classes.title}>Cadadastro de <strong>Serviços</strong></div>
-            <ServiceForm onSubmit={onSubmit} loading={loadingServicesCreate} />
-            <ServiceTable
-              dataServices={dataServices?.data}
-              loadingServices={loadingServices}
-              onDeleteService={onDeleteService}
-            />
+          <div className={classes.title}>
+            Cadadastro de <strong>Serviços</strong>
+          </div>
+          <ServiceForm onSubmit={onSubmit} loading={loadingServicesCreate} />
+          <ServiceTable
+            dataServices={dataServices?.data}
+            loadingServices={loadingServices}
+            onDeleteService={onDeleteService}
+          />
         </Container>
       </Layout>
     </>
   );
 }
+
+Index.getInitialProps = async ({ ...ctx }) => {
+  const slug = ctx.query.slug;
+  if (slug && slug.indexOf('.') === -1) {
+    return { slug };
+  }
+};

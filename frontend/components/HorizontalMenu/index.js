@@ -64,7 +64,7 @@ export default function HorizontalMenu() {
 
   return (
     <List className={classes.listMenus}>
-      {appPages.map(menu => (
+      {/* {appPages.map(menu => (
         <MenuItem
           className={classes.menu}
           button
@@ -103,7 +103,7 @@ export default function HorizontalMenu() {
             </Link>
           </React.Fragment>
         </MenuItem>
-      ))}
+      ))} */}
     </List>
   );
 }

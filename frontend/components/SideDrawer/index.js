@@ -12,32 +12,12 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { Creators as AuthCreators } from 'appStore/ducks/auth';
 import Link from 'next/link';
-// import BookmarkIcon from '@material-ui/icons/Bookmark';
-// import TimelineIcon from '@material-ui/icons/Timeline';
 
-export const appPages = [
-  {
-    id: 'home',
-    name: 'Início',
-    path: '/',
-  },
-  {
-    id: 'services',
-    name: 'Serviços',
-    path: '/services',
-    requiredAuth: true,
-  },
-  {
-    id: 'configs',
-    name: 'Configurações',
-    path: '/configs',
-  },
-];
-
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   list: {
     display: 'flex',
     flexDirection: 'column',
+    backgroundColor: theme.palette.background.darkGray,
     flex: 1,
     width: 250,
   },
@@ -49,11 +29,31 @@ const useStyles = makeStyles({
   fullList: {
     width: 'auto',
   },
-});
+}));
 
-export default function SideDrawer() {
+export default function SideDrawer({ slug }) {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const appPages = [
+    {
+      id: 'home',
+      name: 'Início',
+      path: `/${slug}`,
+    },
+    {
+      id: 'services',
+      name: 'Serviços',
+      path: `/services/${slug}`,
+      requiredAuth: true,
+    },
+    {
+      id: 'configs',
+      name: 'Configurações',
+      path: '/configs',
+      requiredAuth: true,
+    },
+  ];
 
   const { data: userData } = useSelector(state => state.user.details);
 
@@ -81,7 +81,6 @@ export default function SideDrawer() {
   const onLogout = () => {
     dispatch(AuthCreators.getLogoutRequest());
   };
-
   const menuFilter = menu => {
     if (!menu.requiredAuth) {
       return true;
@@ -114,7 +113,7 @@ export default function SideDrawer() {
       <Divider />
       <ListItem button onClick={onLogout}>
         <ListItemIcon>
-          <ExitToAppIcon />
+          <ExitToAppIcon color="secondary" />
         </ListItemIcon>
         <ListItemText primary="Sair" />
       </ListItem>

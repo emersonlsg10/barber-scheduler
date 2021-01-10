@@ -140,7 +140,7 @@ export default function Index({ slug }) {
 
   return (
     <>
-      <Layout maxWidth={false}>
+      <Layout maxWidth={false} slug={slug}>
         {isAuth && (
           <Container maxWidth={'lg'}>
             <Greetings name={dataUser?.username} />

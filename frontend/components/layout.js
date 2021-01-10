@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Layout({ children, maxWidth = 'lg' }) {
+export default function Layout({ children, maxWidth = 'lg', slug }) {
   const classes = useStyles();
 
   const { isAuth } = useSelector(state => state.auth);
@@ -60,7 +60,7 @@ export default function Layout({ children, maxWidth = 'lg' }) {
       {isAuth && (
         <>
           <Head title="Agenda Aqui" />
-          <Nav />
+          <Nav slug={slug} />
           <Container
             className={classes.contentContainer}
             maxWidth={maxWidth}

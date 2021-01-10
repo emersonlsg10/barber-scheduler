@@ -122,7 +122,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Nav = ({ exibirBotoes = true }) => {
+const Nav = ({ exibirBotoes = true, slug }) => {
   const classes = useStyles();
 
   return (
@@ -137,14 +137,14 @@ const Nav = ({ exibirBotoes = true }) => {
             alignItems="center">
             <Grid item>
               <Hidden mdUp>
-                <SideDrawer />
+                <SideDrawer slug={slug} />
               </Hidden>
               <Hidden smDown>
                 <HorizontalMenu />
               </Hidden>
             </Grid>
             <div className={classes.logoDiv}>
-              <Link href="/">
+              <Link href={`/${slug}`}>
                 <a
                   style={{
                     display: 'flex',
@@ -152,7 +152,7 @@ const Nav = ({ exibirBotoes = true }) => {
                     alignItems: 'center',
                   }}>
                   <img
-                    src="barber-logo.jpg"
+                    src="/barber-logo.jpg"
                     alt="logo"
                     width="auto"
                     height="60"
