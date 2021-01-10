@@ -54,7 +54,7 @@ const configs = {
     '18',
     '19',
   ],
-  perHour: ['00', '30'],
+  perHour: ['00'],
   razao: 30,
 };
 
@@ -72,6 +72,7 @@ export default function SchedulesDay({
   dataUser,
   hoursPerDays,
   companyLoading,
+  per_schedule,
 }) {
   const classes = useStyles();
   const {
@@ -89,10 +90,13 @@ export default function SchedulesDay({
 
   const verifyHourSchedule = hour => {
     return dataSchedules?.find(item => item.schedule === hour);
-  }
+  };
+
+  const filterHourSchedule = hour => {
+    return dataSchedules?.filter(item => item.schedule === hour);
+  };
 
   const handleOpenModal = (hour, min, rowData) => {
-
     if (rowData) {
       const Teste = rowData[0]?.service_id;
       console.log(JSON.parse(Teste));
@@ -115,14 +119,15 @@ export default function SchedulesDay({
     let firstOneFounded = null;
 
     for (let i = 0; i < scanTime / tempRazao; i++) {
-      tempHour = moment(tempHour, 'HH:mm:ss').add(tempRazao, 'minutes').format('HH:mm:ss');
+      tempHour = moment(tempHour, 'HH:mm:ss')
+        .add(tempRazao, 'minutes')
+        .format('HH:mm:ss');
       console.log(tempHour, 'verificando', !!verifyHourSchedule(`${tempHour}`));
       if (verifyHourSchedule(`${tempHour}`)) {
         firstOneFounded = tempHour;
         continue;
       } else {
-        if (!firstOneFounded)
-          count++
+        if (!firstOneFounded) count++;
       }
     }
     setLimitTimeService(count);
@@ -135,7 +140,9 @@ export default function SchedulesDay({
     let tempHour = `${schedule}`;
 
     for (let i = 1; i <= scanTime / tempRazao; i++) {
-      tempHour = moment(tempHour, 'HH:mm:ss').subtract(tempRazao, 'minutes').format('HH:mm:ss');
+      tempHour = moment(tempHour, 'HH:mm:ss')
+        .subtract(tempRazao, 'minutes')
+        .format('HH:mm:ss');
 
       const verifyExists = verifyHourSchedule(`${tempHour}`);
       if (verifyExists && verifyExists?.total_time > tempRazao * i) {
@@ -147,11 +154,16 @@ export default function SchedulesDay({
 
   useEffect(() => {
     setOpenModal(false);
-  }, [])
+  }, []);
 
   useEffect(() => {
-    if (!loadingScheduleDetails && !!dataScheduleDetails && dataScheduleDetails.length === 0) {
-      if (!loadingSchedules && selectedTime && !!dataSchedules && !verifyHourSchedule(selectedTime)) {
+    if (!loadingScheduleDetails && !!dataScheduleDetails) {
+      if (
+        !loadingSchedules &&
+        selectedTime &&
+        !!dataSchedules &&
+        dataScheduleDetails.length < per_schedule
+      ) {
         setOpenModal(true);
         countLimit(selectedTime);
       } else {
@@ -175,21 +187,29 @@ export default function SchedulesDay({
   useEffect(() => {
     if (loadingSchedules) {
       setDelayLoading(true);
-      setTimeout(() => { setDelayLoading(false) }, 1000);
+      setTimeout(() => {
+        setDelayLoading(false);
+      }, 500);
     }
   }, [loadingSchedules]);
 
   return (
     <div className={classes.root}>
-      <Backdrop className={classes.backdrop} open={loadingScheduleDetails || delayLoading || companyLoading}>
+      <Backdrop
+        className={classes.backdrop}
+        open={loadingScheduleDetails || delayLoading || companyLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
-      <List component="nav" className={classes.list} aria-label="main mailbox folders">
+      <List
+        component="nav"
+        className={classes.list}
+        aria-label="main mailbox folders">
         {hoursPerDays?.map((hour, index) => (
           <>
-            {configs.perHour.map((min) => (
+            {configs.perHour.map(min => (
               <>
-                <ItemList key={index}
+                <ItemList
+                  key={index}
                   index={index}
                   hour={hour}
                   min={min}
@@ -200,6 +220,8 @@ export default function SchedulesDay({
                   loadingSchedules={loadingSchedules}
                   loadingScheduleDetails={loadingScheduleDetails}
                   countLimitBefore={countLimitBefore}
+                  filterHourSchedule={filterHourSchedule}
+                  per_schedule={per_schedule}
                 />
               </>
             ))}
@@ -219,7 +241,8 @@ export default function SchedulesDay({
           selectedDate={selectedDate}
           onSchedulerSubmit={onSchedulerSubmit}
           loadingScheduleCreate={loadingScheduleCreate}
-          razao={configs.razao} />
+          razao={configs.razao}
+        />
       </Modal>
     </div>
   );
@@ -235,35 +258,49 @@ const ItemList = ({
   loadingSchedules,
   loadingScheduleDetails,
   countLimitBefore,
+  filterHourSchedule,
+  per_schedule,
 }) => {
   const classes = useStyles();
-  const VerifySchedule = verifyHourSchedule(`${hour}:${min}:00`);
-  const VerifyBefore = countLimitBefore(`${hour}:${min}:00`);
-  console.log(VerifyBefore);
+  // const VerifySchedule = verifyHourSchedule(`${hour}:${min}:00`);
+  // const VerifyBefore = countLimitBefore(`${hour}:${min}:00`);
+  const VerifyCount = filterHourSchedule(`${hour}:${min}:00`);
   return (
     <>
-      { VerifySchedule || VerifyBefore ? (
-        <ListItem onClick={() => console.log(VerifySchedule)} button className={classes.listItem}>
+      {VerifyCount.length >= per_schedule ? (
+        <ListItem
+          onClick={() => console.log('teste')}
+          button
+          className={classes.listItem}>
           <ListItemIcon>
             <AccessTimeIcon style={{ color: 'white' }} />
           </ListItemIcon>
           <ListItemText primary={`${hour}:${min}`} />
           <span style={{ fontStyle: 'italic', fontSize: 13 }}>
-            {(VerifyBefore && VerifyBefore.client_id === dataUser?.id) || (dataUser && VerifySchedule && dataUser?.id === VerifySchedule.client_id) ? 'Reservado por você' : 'Reservado por outra pessoa'}
+            {dataUser &&
+            VerifyCount.find(item => item.client_id === dataUser?.id)
+              ? 'Reservado por você'
+              : 'Reservado por outra pessoa'}
           </span>
-        </ListItem>) : (
-          <ListItem onClick={() => handleOpenModal(hour, min)} button className={classes.listItem}>
-            <ListItemIcon>
-              <AccessTimeIcon style={{ color: 'white' }}/>
-            </ListItemIcon>
-            <ListItemText primary={`${hour}:${min}`} />
-            {(loadingScheduleDetails || loadingSchedules) && selectedTime === `${hour}:${min}:00` ? <CircularProgress color="primary" size={16} /> : <AddCircleOutlineIcon style={{ marginLeft: 10 }} />}
-          </ListItem>)}
-          <style global jsx>{`
-            .MuiListItemText-primary {
-              color: white !important;
-            }
-          `}</style>
+        </ListItem>
+      ) : (
+        <ListItem
+          onClick={() => handleOpenModal(hour, min)}
+          button
+          className={classes.listItem}>
+          <ListItemIcon>
+            <AccessTimeIcon style={{ color: 'white' }} />
+          </ListItemIcon>
+          <ListItemText primary={`${hour}:${min}`} />
+            <span style={{ fontStyle: 'italic', fontSize: 11 }}>{`${per_schedule - VerifyCount.length} vagas`}</span>
+          <AddCircleOutlineIcon style={{ marginLeft: 10 }} />
+        </ListItem>
+      )}
+      <style global jsx>{`
+        .MuiListItemText-primary {
+          color: white !important;
+        }
+      `}</style>
     </>
   );
 };

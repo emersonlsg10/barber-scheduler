@@ -170,6 +170,7 @@ export default function Index({ slug }) {
                 dataUser={dataUser}
                 companyLoading={companyLoading}
                 hoursPerDays={companyData ? JSON.parse(companyData?.hours_per_day) : []}
+                per_schedule={companyData ? companyData?.per_schedule : 1}
               />
             </div>
           </Container>
