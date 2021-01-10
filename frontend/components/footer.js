@@ -47,7 +47,7 @@ const Footer = () => {
               paddingRight: 25,
             }}>
             <img
-              src="barber-logo.jpg"
+              src="/barber-logo.jpg"
               alt="logo"
               width="auto"
               height="70"
