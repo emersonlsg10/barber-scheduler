@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
@@ -127,20 +128,21 @@ export default function Index({ slug }) {
   const verifyNumbersDay = selectedDate => {
     var dayWeek = moment(selectedDate);
     const dayNumber = dayWeek.day();
-    if (companyData) {
+    if (companyData?.days) {
       const daysCompany = JSON.parse(companyData.days);
       if (daysCompany.find(item => item === dayNumber)) return false;
       else {
         return nameDay(dayNumber);
       }
+      return nameDay(dayNumber);
     }
-    return nameDay(dayNumber);
   };
 
   const [showMessageDay, setShowMessageDay] = useState(null);
   useEffect(() => {
     if (!isAuth && !slug) return;
 
+    setShowMessageDay(null);
     // retorna se não for um dia permitido pelo estabelecimento
     const message = verifyNumbersDay(selectedDate);
     if (message) {
@@ -202,7 +204,35 @@ export default function Index({ slug }) {
                 display: 'flex',
                 justifyContent: 'center',
               }}>
-              {!showMessageDay ? (
+              {showMessageDay ? (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: 30,
+                  }}>
+                  <div>
+                    <ErrorOutlineIcon
+                      style={{ color: '#b63d1b', width: 100, height: 100 }}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      color: '#fff',
+                    }}>
+                    <h3>{`${showMessageDay}! Não agendamos para esse dia, por favor escolha outra data.`}</h3>
+                    <h4>Dias que agendamos: </h4>
+                    <ul style={{ paddingLeft: 15 }}>
+                      {companyData &&
+                        JSON.parse(companyData.days).map(item => (
+                          <li key={`${item}-day`}>{nameDay(item)}</li>
+                        ))}
+                    </ul>
+                  </div>
+                </div>
+              ) : (
                 <SchedulesDay
                   dataSchedules={dataSchedules ? dataSchedules : []}
                   loadingSchedules={loadingSchedules}
@@ -224,33 +254,6 @@ export default function Index({ slug }) {
                   per_schedule={companyData ? companyData?.per_schedule : 1}
                   razao={companyData ? companyData?.razao : 1}
                 />
-              ) : (
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginTop: 30,
-                  }}>
-                  <div>
-                    <ErrorOutlineIcon
-                      style={{ color: '#b63d1b', width: 100, height: 100 }}
-                    />
-                  </div>
-                  <div
-                    style={{
-                      color: '#fff',
-                    }}>
-                    <h3>{`${showMessageDay}! Não agendamos para esse dia, por favor escolha outra data.`}</h3>
-                    <h4>Dias que agendamos: </h4>
-                    <ul style={{ paddingLeft: 15 }}>
-                      {companyData && JSON.parse(companyData.days).map(item => (
-                        <li key={`${item}-day`}>{nameDay(item)}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
               )}
             </div>
           </Container>
