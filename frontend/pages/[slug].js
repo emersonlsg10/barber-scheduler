@@ -140,9 +140,9 @@ export default function Index({ slug }) {
   const [showMessageDay, setShowMessageDay] = useState(null);
   useEffect(() => {
     if (!isAuth && !slug) return;
+
     // retorna se não for um dia permitido pelo estabelecimento
     const message = verifyNumbersDay(selectedDate);
-    console.log(message);
     if (message) {
       setShowMessageDay(message);
       return;
@@ -246,7 +246,7 @@ export default function Index({ slug }) {
                     <h4>Dias que agendamos: </h4>
                     <ul style={{ paddingLeft: 15 }}>
                       {companyData && JSON.parse(companyData.days).map(item => (
-                        <li key={item}>{nameDay(item)}</li>
+                        <li key={`${item}-day`}>{nameDay(item)}</li>
                       ))}
                     </ul>
                   </div>

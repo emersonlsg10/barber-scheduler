@@ -103,7 +103,10 @@ export default function SideDrawer({ slug }) {
                   <ListItemIcon style={{ color: '#aaa' }}>
                     {menu.icon}
                   </ListItemIcon>
-                  <ListItemText primary={menu.name} />
+                  <span
+                    style={{ color: '#fff', margin: '5px 0px', fontSize: 15 }}>
+                    {menu.name}
+                  </span>
                 </ListItem>
               </Link>
               {menu.id === 'home' && <Divider />}

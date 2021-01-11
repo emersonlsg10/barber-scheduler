@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import { Button, CircularProgress } from '@material-ui/core';
 import appUtils from 'utils/appUtils';
-import FormLabel from '@material-ui/core/FormLabel';
+import moment from 'moment';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -31,8 +31,7 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     color: theme.palette.primary.main,
-    marginLeft: 10,
-    marginTop: 35,
+    marginTop: 0,
   },
   buttonLogin: {
     marginTop: 10,
@@ -107,15 +106,17 @@ function ModalScheduler({
   return (
     <>
       <div className={classes.modal}>
-        <span>Horário selecionado: {selectedTime}</span>
+        <span>
+          Horário selecionado: {moment(selectedTime).format('HH:mm:ss')}
+        </span>
         <div>Data selecionada: {selectedDate}</div>
         <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">
+          <h3 className={classes.title}>
             {selectedSchedule
               ? 'Serviços Agendados:'
               : 'Escolha os serviços disponíveis no horário selecionado:'}
-          </FormLabel>
-          <FormGroup style={{ marginTop: 20 }}>
+          </h3>
+          <FormGroup style={{ marginTop: 5 }}>
             {dataServices &&
               dataServices?.length > 0 &&
               dataServices.map((item, index) => (
