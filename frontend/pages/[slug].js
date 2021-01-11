@@ -15,6 +15,7 @@ import { Creators as SchedulesCreateCreators } from 'appStore/ducks/schedules/cr
 import { Creators as CompanyDetailsCreators } from 'appStore/ducks/company/details';
 import moment from 'moment';
 import { Creators as SchedulesListDetailsCreators } from 'appStore/ducks/schedules/list';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -56,7 +57,9 @@ export default function Index({ slug }) {
 
   const { isAuth } = useSelector(state => state.auth);
 
-  const { data: companyData, loading: companyLoading } = useSelector(state => state.company.details);
+  const { data: companyData, loading: companyLoading } = useSelector(
+    state => state.company.details
+  );
   const { data: dataUser, loading: loadingUser } = useSelector(
     state => state.user.details
   );
@@ -100,11 +103,54 @@ export default function Index({ slug }) {
     );
   };
 
+  const nameDay = number => {
+    switch (number) {
+      case 0:
+        return 'Domingo';
+      case 1:
+        return 'Segunda Feira';
+      case 2:
+        return 'Terça Feira';
+      case 3:
+        return 'Quarta Feira';
+      case 4:
+        return 'Quinta Feira';
+      case 5:
+        return 'Sexta Feira';
+      case 6:
+        return 'Sábado';
+      default:
+        return 'Domingo';
+    }
+  };
+
+  const verifyNumbersDay = selectedDate => {
+    var dayWeek = moment(selectedDate);
+    const dayNumber = dayWeek.day();
+    if (companyData) {
+      const daysCompany = JSON.parse(companyData.days);
+      if (daysCompany.find(item => item === dayNumber)) return false;
+      else {
+        return nameDay(dayNumber);
+      }
+    }
+    return nameDay(dayNumber);
+  };
+
+  const [showMessageDay, setShowMessageDay] = useState(null);
   useEffect(() => {
     if (!isAuth && !slug) return;
+    // retorna se não for um dia permitido pelo estabelecimento
+    const message = verifyNumbersDay(selectedDate);
+    console.log(message);
+    if (message) {
+      setShowMessageDay(message);
+      return;
+    }
+    setShowMessageDay(null);
+
     var date = moment(selectedDate).format('YYYY-MM-DD');
     var now = moment().format('YYYY-MM-DD');
-
     if (now > date) {
       handleOpenModal();
       setSelectedDate(new Date());
@@ -148,31 +194,64 @@ export default function Index({ slug }) {
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
             />
-            <h3 className={classes.title}>Selecione um horário: </h3>
+            {!showMessageDay && (
+              <h3 className={classes.title}>Selecione um horário: </h3>
+            )}
             <div
               style={{
                 display: 'flex',
                 justifyContent: 'center',
               }}>
-              <SchedulesDay
-                dataSchedules={dataSchedules ? dataSchedules : []}
-                loadingSchedules={loadingSchedules}
-                dataServices={dataServices}
-                loadingServices={loadingServices}
-                getSchedulesDay={getSchedulesDay}
-                getSchedulesDetails={getSchedulesDetails}
-                selectedDate={
-                  selectedDate && moment(selectedDate).format('DD/MM/YYYY')
-                }
-                selectedTime={selectedTime}
-                setSelectedTime={setSelectedTime}
-                onSchedulerSubmit={onSchedulerSubmit}
-                dataUser={dataUser}
-                companyLoading={companyLoading}
-                hoursPerDays={companyData ? JSON.parse(companyData?.hours_per_day) : []}
-                per_schedule={companyData ? companyData?.per_schedule : 1}
-                razao={companyData ? companyData?.razao : 1}
-              />
+              {!showMessageDay ? (
+                <SchedulesDay
+                  dataSchedules={dataSchedules ? dataSchedules : []}
+                  loadingSchedules={loadingSchedules}
+                  dataServices={dataServices}
+                  loadingServices={loadingServices}
+                  getSchedulesDay={getSchedulesDay}
+                  getSchedulesDetails={getSchedulesDetails}
+                  selectedDate={
+                    selectedDate && moment(selectedDate).format('DD/MM/YYYY')
+                  }
+                  selectedTime={selectedTime}
+                  setSelectedTime={setSelectedTime}
+                  onSchedulerSubmit={onSchedulerSubmit}
+                  dataUser={dataUser}
+                  companyLoading={companyLoading}
+                  hoursPerDays={
+                    companyData ? JSON.parse(companyData?.hours_per_day) : []
+                  }
+                  per_schedule={companyData ? companyData?.per_schedule : 1}
+                  razao={companyData ? companyData?.razao : 1}
+                />
+              ) : (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: 30,
+                  }}>
+                  <div>
+                    <ErrorOutlineIcon
+                      style={{ color: '#b63d1b', width: 100, height: 100 }}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      color: '#fff',
+                    }}>
+                    <h3>{`${showMessageDay}! Não agendamos para esse dia, por favor escolha outra data.`}</h3>
+                    <h4>Dias que agendamos: </h4>
+                    <ul style={{ paddingLeft: 15 }}>
+                      {companyData && JSON.parse(companyData.days).map(item => (
+                        <li key={item}>{nameDay(item)}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )}
             </div>
           </Container>
         )}

@@ -111,7 +111,9 @@ function ModalScheduler({
         <div>Data selecionada: {selectedDate}</div>
         <FormControl component="fieldset" className={classes.formControl}>
           <FormLabel component="legend">
-            Escolha os serviços disponíveis no horário selecionado:
+            {selectedSchedule
+              ? 'Serviços Agendados:'
+              : 'Escolha os serviços disponíveis no horário selecionado:'}
           </FormLabel>
           <FormGroup style={{ marginTop: 20 }}>
             {dataServices &&
