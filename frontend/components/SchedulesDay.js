@@ -139,8 +139,8 @@ export default function SchedulesDay({
       tempHour = moment(tempHour, 'HH:mm:ss')
         .add(tempRazao, 'minutes')
         .format('HH:mm:ss');
-      console.log(tempHour, 'verificando', !!verifyHourSchedule(`${tempHour}`));
-      if (verifyHourSchedule(`${tempHour}`)) {
+      console.log(tempHour, 'verificando', !!verifyHourSchedule(`${tempHour}`), filterHourSchedule(tempHour).length);
+      if (verifyHourSchedule(`${tempHour}`) && filterHourSchedule(tempHour).length < per_schedule) {
         firstOneFounded = tempHour;
         continue;
       } else {

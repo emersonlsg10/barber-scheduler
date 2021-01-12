@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import { Button, CircularProgress } from '@material-ui/core';
 import appUtils from 'utils/appUtils';
-import moment from 'moment';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -106,9 +105,7 @@ function ModalScheduler({
   return (
     <>
       <div className={classes.modal}>
-        <span>
-          Horário selecionado: {moment(selectedTime).format('HH:mm:ss')}
-        </span>
+        <span>Horário selecionado: {selectedTime}</span>
         <div>Data selecionada: {selectedDate}</div>
         <FormControl component="fieldset" className={classes.formControl}>
           <h3 className={classes.title}>
