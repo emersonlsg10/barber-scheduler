@@ -42,6 +42,12 @@ export default function SideDrawer({ slug }) {
       path: `/${slug}`,
     },
     {
+      id: 'agendamentos',
+      name: 'Agendamentos',
+      path: `/agendamentos/${slug}`,
+      requiredAuth: true,
+    },
+    {
       id: 'services',
       name: 'Serviços',
       path: `/services/${slug}`,
@@ -100,9 +106,11 @@ export default function SideDrawer({ slug }) {
             <React.Fragment key={menu.id}>
               <Link href={menu.path}>
                 <ListItem button>
-                  <ListItemIcon style={{ color: '#aaa' }}>
-                    {menu.icon}
-                  </ListItemIcon>
+                  {menu.icon && (
+                    <ListItemIcon style={{ color: '#aaa' }}>
+                      {menu.icon}
+                    </ListItemIcon>
+                  )}
                   <span
                     style={{ color: '#fff', margin: '5px 0px', fontSize: 15 }}>
                     {menu.name}

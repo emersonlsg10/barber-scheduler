@@ -169,6 +169,10 @@ export default function SchedulesDay({
     return null;
   };
 
+  const onAdminClick = schedules => {
+    console.log(schedules);
+  };
+
   useEffect(() => {
     setOpenModal(false);
   }, []);
@@ -240,6 +244,7 @@ export default function SchedulesDay({
                   filterHourSchedule={filterHourSchedule}
                   per_schedule={per_schedule}
                   onEditSchedule={onEditSchedule}
+                  onAdminClick={onAdminClick}
                 />
               </>
             ))}
@@ -279,6 +284,7 @@ const ItemList = ({
   filterHourSchedule,
   per_schedule,
   onEditSchedule,
+  onAdminClick
 }) => {
   const classes = useStyles();
   // const VerifySchedule = verifyHourSchedule(`${hour}:${min}:00`);
@@ -291,7 +297,7 @@ const ItemList = ({
       {VerifyCount.length >= per_schedule || mySchedule ? (
         <ListItem
           button
-          onClick={() => mySchedule && onEditSchedule(mySchedule)}
+          onClick={() => dataUser?.group === '1' ?  onAdminClick(VerifyCount) : onEditSchedule(mySchedule)}
           className={classes.listItem}>
           <ListItemIcon>
             <AccessTimeIcon style={{ color: 'white' }} />
@@ -315,7 +321,7 @@ const ItemList = ({
         </ListItem>
       ) : (
         <ListItem
-          onClick={() => handleOpenModal(hour, min)}
+          onClick={() => dataUser?.group === '1' ?  onAdminClick(VerifyCount) : handleOpenModal(hour, min)}
           button
           className={classes.listItem}>
           <ListItemIcon>
