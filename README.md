@@ -1,14 +1,14 @@
 # A MOBILE FIRST SYSTEM TO BARBER-SCHEDULUES
 
-# ARCHITECTURE MULTI TENANT - SINGLE DATABASE
+ - ARCHITECTURE MULTI TENANT - SINGLE DATABASE
 
-# Front End: 
-  Next JS, React and Redux Sagas, Material UI Components, Formik.
+ - Front End: 
+  React, Framework Next JS, Redux, Sagas, Material UI Components, Formik.
 
-# Back End:
+ - Back End:
   API Developed with Adonis JS.
   
-# DATA BASE: 
+ - DATA BASE: 
   MySql
 
 ![Screenshot](home.jpeg)
