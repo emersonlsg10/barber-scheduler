@@ -70,8 +70,8 @@ Factory.blueprint('App/Models/Schedule', async (faker) => {
     schedule: generateSchedule(),
     total_time: 60,
     total_value: 30,
-    client_id: 3,
-    company_id: 1,
+    client_id: 1,
+    company_id: 2,
     service_id: JSON.stringify(service_id)
   }
 })
